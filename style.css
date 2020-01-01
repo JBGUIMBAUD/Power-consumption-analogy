@@ -85,7 +85,7 @@
   .ticks {
     display: flex;
     justify-content: space-between;
-    padding: 10px 20px;
+    padding: 10px;
   }
   
   .tick {
@@ -100,6 +100,14 @@
   }
   
   
+  
   label {
       margin: 10px;
+  }
+
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    width: 960px;
+    height: 500px;
+    position: relative;
   }
