@@ -12,7 +12,11 @@
     font-size: 20px;
     line-height: 20px;
     color: black;
-    background: white;
+    background: azure;
+    /* background-image: url('QERreport.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover; */
   }
   
   input[type=range] {

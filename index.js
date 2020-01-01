@@ -13,35 +13,49 @@ function wattToJoules(w_enery) {
 
 function joulesToRun(energy) {
     // 1h running = 770kcal/h = 3,2e+6 J
-    res = energy/3.2e6
+    res = energy / 3.2e6
     console.log("Hours to run: ", res)
     return res
 }
 
 function joulesToWalk(energy) {
     // 1h walking = 267 kcal/h = 1,117e+6 J
-    res = energy/1.117e6
+    res = energy / 1.117e6
     console.log("Hours to walk: ", res)
+    return res
+}
+
+function joulesToCycle(energy) {
+    // 1h cycling = 402 kcal/h = 1,682e+6
+    res = energy / 1.682e6
+    console.log("Hours to cycle", res)
+    return res
+}
+
+function joulesToSwim(energy) {
+    // 1h swimming = 1071 kcal/h = 4481064 J
+    res = energy / 4481064
+    console.log("Hours to swim", res)
     return res
 }
 function joulesToBigMac(energy) {
     // 1 BigMac = 2300kJ
-    res = energy/2300000
+    res = energy / 2300000
     console.log("Number of BigMac: ", res)
     return res
 }
 
+// laptop
 wattsConsumption = {
-    "Google" : 29.5,
-    "Repos" : 27.5,
-    "Netflix" : 32,
-    "Jeux" : 49
+    "Google": 32.5,
+    "Repos": 34.5,
+    "Netflix": 40.5,
+    "Jeux": 109
 }
 
-function compute_total_Watt_enery (wattsConsumption, pcUsage) {
+function compute_total_Watt_enery(wattsConsumption, pcUsage) {
     energy_total = 0
-    console.log(pcUsage)
-    Object.keys(pcUsage).forEach(function(key) {
+    Object.keys(pcUsage).forEach(function (key) {
         energy_total += pcUsage[key] * wattsConsumption[key]
     });
     console.log(energy_total);
@@ -140,8 +154,8 @@ window.onload = () => {
     svg.append("g")
         .attr("class", "lines");
 
-    var width = 960,
-        height = 450,
+    var width = 680,
+        height = 400,
         radius = Math.min(width, height) / 2;
 
     var pie = d3.pie()
@@ -160,7 +174,7 @@ window.onload = () => {
         slice.enter()
             .insert("path")
             .attr('d', d3.arc()
-                .innerRadius(radius* 0.8)
+                .innerRadius(radius * 0.8)
                 .outerRadius(radius)
             )
             .attr('fill', function (d) { return (colors(d.data.label)) })
@@ -182,9 +196,9 @@ window.onload = () => {
     }
 
     dataset = update_energy_data()
-    var margin_bars = {top: 40, right: 30, bottom: 30, left: 50},
-        width_bars = 460 - margin_bars.left - margin_bars.right,
-        height_bars = 320 - margin_bars.top - margin_bars.bottom;
+    var margin_bars = { top: 40, right: 30, bottom: 30, left: 50 },
+        width_bars = 680 - margin_bars.left - margin_bars.right,
+        height_bars = 400 - margin_bars.top - margin_bars.bottom;
 
     var greyColor = "#898989";
     var barColor = d3.interpolateInferno(0.4);
@@ -196,12 +210,12 @@ window.onload = () => {
         .attr("width", width_bars + margin_bars.left + margin_bars.right)
         .attr("height", height_bars + margin_bars.top + margin_bars.bottom)
         .attr("class", "barChart")
-    .append("g")
+        .append("g")
         .attr("transform", "translate(" + margin_bars.left + "," + margin_bars.top + ")");
 
     var x = d3.scaleBand()
         .range([0, width_bars])
-            .padding(0.4);
+        .padding(0.4);
     var y = d3.scaleLinear()
         .range([height_bars, 0]);
 
@@ -209,8 +223,9 @@ window.onload = () => {
     var yAxis = d3.axisLeft(y);
     // var yAxis = d3.axisLeft(y).tickFormat(formatPercent);
 
-    x.domain(dataset.map( d => { return d.label; }));
-    y.domain([0, d3.max(dataset,  d => { return d.value; })]);
+    x.domain(dataset.map(d => { return d.label; }));
+    y.domain([0, d3.max(dataset, d => { return d.value; })]);
+    // console.log(pcUsage)
     // y.domain([0, 1]);
 
     svg_bars.append("g")
@@ -218,86 +233,58 @@ window.onload = () => {
         .attr("transform", "translate(0," + height_bars + ")")
         .call(xAxis);
     svg_bars.append("g")
-        .attr("class","y axis")
+        .attr("class", "yaxis")
         .call(yAxis);
 
     svg_bars.selectAll(".bar").data(dataset)
         .enter().append("rect")
-        .attr("class", "bar")
-        .style("display", d => { return d.value === null ? "none" : null; })
-        .style("fill",  d => { 
-            return d.value === d3.max(dataset,  d => { return d.value; }) 
-            ? highlightColor : barColor
-            })
-        .attr("x",  d => { return x(d.label); })
-        .attr("width", x.bandwidth())
-            .attr("y",  d => { return height_bars; })
-            .attr("height", 0)
-                .transition()
-                .duration(750)
-                .delay(function (d, i) {
-                    return i * 150;
-                })
-        .attr("y",  d => { return y(d.value); })
-        .attr("height",  d => { return height_bars - y(d.value); });
+        .attr("class", "bar");
 
-    svg_bars.selectAll(".label")        
+    svg_bars.selectAll(".label")
         .data(dataset)
         .enter()
         .append("text")
         .attr("class", "label")
-        .style("display",  d => { return d.value === null ? "none" : null; })
-        .attr("x", ( d => { return x(d.label) + (x.bandwidth() / 2) ; }))
-            .style("fill",  d => { 
-                return d.value === d3.max(dataset,  d => { return d.value; }) 
-                ? highlightColor : greyColor
-                })
-        .attr("y",  d => { return height_bars; })
-            .attr("height", 0)
-                .transition()
-                .duration(750)
-                .delay((d, i) => { return i * 150; })
-        .text( d => { return d.value; })
-        .attr("y",  d => { return y(d.value) + .1; })
-        .attr("dy", "-.7em"); 
 
     refreshChart = function (dataset) {
-        svg_bars.selectAll(".bar").data(dataset)
-        .attr("class", "bar")
-        .style("display", d => { return d.value === null ? "none" : null; })
-        .style("fill",  d => { 
-            return d.value === d3.max(dataset,  d => { return d.value; }) 
-            ? highlightColor : barColor
-            })
-        .attr("x",  d => { return x(d.label); })
-        .attr("width", x.bandwidth())
-            .attr("y",  d => { return height_bars; })
-            .attr("height", 0)
-                .transition()
-                .duration(750)
-                .delay(function (d, i) {
-                    return i * 150;
-                })
-        .attr("y",  d => { return y(d.value); })
-        .attr("height",  d => { return height_bars - y(d.value); });
+        // yAxis = d3.axisLeft(y);
+        var t = d3.transition()
+        .duration(500)
 
-        svg_bars.selectAll(".label")        
+        y.domain([0, d3.max(dataset, d => { return d.value; })]);
+        yAxis.scale(y);
+
+        svg_bars.selectAll(".bar").data(dataset)
+            .style("display", d => { return d.value === null ? "none" : null; })
+            .style("fill", d => {
+                return d.value === d3.max(dataset, d => { return d.value; })
+                    ? highlightColor : barColor
+            })
+            .attr("x", d => { return x(d.label); })
+            .attr("width", x.bandwidth())
+            .attr("y", d => { return height_bars; })
+            .attr("height", 0)
+            .attr("y", d => { return y(d.value); })
+            .attr("height", d => { return height_bars - y(d.value); });
+
+        svg_bars.selectAll(".label")
             .data(dataset)
             .attr("class", "label")
-            .style("display",  d => { return d.value === null ? "none" : null; })
-            .attr("x", ( d => { return x(d.label) + (x.bandwidth() / 2) ; }))
-                .style("fill",  d => { 
-                    return d.value === d3.max(dataset,  d => { return d.value; }) 
+            .style("display", d => { return d.value === null ? "none" : null; })
+            .attr("x", (d => { return x(d.label) + (x.bandwidth() / 2); }))
+            .style("fill", d => {
+                return d.value === d3.max(dataset, d => { return d.value; })
                     ? highlightColor : greyColor
-                    })
-            .attr("y",  d => { return height_bars; })
-                .attr("height", 0)
-                    .transition()
-                    .duration(750)
-                    .delay((d, i) => { return i * 150; })
-            .text( d => { return d.value; })
-            .attr("y",  d => { return y(d.value) + .1; })
+            })
+            .attr("y", d => { return height_bars; })
+            .attr("height", 0)
+            .text(d => { return d3.format(".1f")(d.value) })
+            .attr("y", d => { return y(d.value) + .1; })
             .attr("dy", "-.7em");
+
+        svg_bars
+            .select(".yaxis")
+            .call( yAxis);
     }
 
     var refreshInterface = function () {
@@ -311,7 +298,7 @@ window.onload = () => {
             "Netflix": netflixUsage,
             "Jeux": gameUsage
         }
-        
+
         //TODO refresh D3
         console.log(getData(pcDetails, pcColors));
         refreshPie(getData(pcDetails, pcColors), pcColors);
@@ -326,15 +313,17 @@ window.onload = () => {
         tot_energy = wattToJoules(tot_energy_w)
         walk = joulesToWalk(tot_energy)
         run = joulesToRun(tot_energy)
+        cycle = joulesToCycle(tot_energy)
+        swim = joulesToSwim(tot_energy)
         burger = joulesToBigMac(tot_energy)
 
         data = [
-            {"label": "time walking(h.)", "value": walk},
-            {"label": "time running (h.)", "value": run},
-            {"label": "Big Macs", "value": burger}
+            { "label": "time walking(h.)", "value": walk },
+            { "label": "time running (h.)", "value": run },
+            { "label": "time cycling (h.)", "value": cycle },
+            { "label": "time swimming (h.)", "value": swim },
+            { "label": "Big Macs", "value": burger }
         ]
         return data
     }
 }
-
-
