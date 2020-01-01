@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"> 
+        <link rel="stylesheet" href="/style.css">
+        <link rel="stylesheet" href="/charts.css">
+    </head>
+    <body>
+        <div class="slider_group">
+
+            <label>Utilisation du PC (en h/jour)</label>
+            <div class="range">
+                <input type="range" min="0" max="24" class="slider" id="pc">
+            </div>
+        </div>
+        <div class="details">
+            <h3>Détails de l'utilisation</h3>
+            <div class="slider_group">
+
+                <label>Google</label>
+                <div class="range">
+                    <input type="range" min="0" max="24" class="slider" id="google">
+                </div>
+            </div>
+            <div class="slider_group">
+
+                <label>Twitch</label>
+                <div class="range">
+                    <input type="range" min="0" max="24" class="slider"id="twitch">
+                </div>
+            </div>
+            <div class="slider_group">
+
+                <label>Netflix</label>
+                <div class="range">
+                    <input type="range" min="0" max="24" class="slider" id="netflix">
+                </div>
+            </div> 
+            <div class="slider_group">
+
+                <label>Jeux</label>
+                <div class="range">
+                    <input type="range" min="0" max="24" class="slider" id="jeux">
+                </div>
+            </div> 
+        </div>
+        <div id="visu">
+
+        </div>
+
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="/index.js"></script>
+    </body>
+
+</html>

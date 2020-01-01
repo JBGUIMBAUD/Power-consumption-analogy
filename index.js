@@ -1,20 +1,34 @@
 
 function wattToDailyJoules(w, durationInHours) {
-    return durationInHours * 3600 * w;
+    res = durationInHours * 3600 * w;
+    console.log("Total energy(J: ", res)
+    return res
+}
+
+function wattToJoules(w_enery) {
+    res = w_enery * 3600
+    console.log("Equivalent in Joules", res)
+    return res
 }
 
 function joulesToRun(energy) {
     // 1h running = 770kcal/h = 3,2e+6 J
-    return energy/3,2e+6
+    res = energy/3.2e6
+    console.log("Hours to run: ", res)
+    return res
 }
 
 function joulesToWalk(energy) {
     // 1h walking = 267 kcal/h = 1,117e+6 J
-    return energy/1,117e+6
+    res = energy/1.117e6
+    console.log("Hours to walk: ", res)
+    return res
 }
 function joulesToBigMac(energy) {
     // 1 BigMac = 2300kJ
-    return energy/2300000
+    res = energy/2300000
+    console.log("Number of BigMac: ", res)
+    return res
 }
 
 wattsConsumption = {
@@ -24,7 +38,7 @@ wattsConsumption = {
     "Jeux" : 49
 }
 
-function compute_total_enery (wattsConsumption, pcUsage) {
+function compute_total_Watt_enery (wattsConsumption, pcUsage) {
     energy_total = 0
     console.log(pcUsage)
     Object.keys(pcUsage).forEach(function(key) {
@@ -303,7 +317,12 @@ window.onload = () => {
         // console.log(getData(pcDetails, pcColors));
         refreshPie(getData(pcDetails, pcColors), pcColors);
         refreshChart(getData(pcDetails, pcColors))
-        compute_total_enery(wattsConsumption, pcDetails)
+        // print energies
+        tot_energy_w = compute_total_Watt_enery(wattsConsumption, pcDetails)
+        tot_energy = wattToJoules(tot_energy_w)
+        joulesToWalk(tot_energy)
+        joulesToRun(tot_energy)
+        joulesToBigMac(tot_energy)
     }
     refreshInterface();
 }
