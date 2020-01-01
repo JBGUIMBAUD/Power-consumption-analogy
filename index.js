@@ -3,20 +3,51 @@ function wattToDailyJoules(w, durationInHours) {
     return durationInHours * 3600 * w;
 }
 
-var gameUsage = 2, twitchUsage = 12, netflixUsage = 5, googleUsage = 2;
+function joulesToRun(energy) {
+    // 1h running = 770kcal/h = 3,2e+6 J
+    return energy/3,2e+6
+}
+
+function joulesToWalk(energy) {
+    // 1h walking = 267 kcal/h = 1,117e+6 J
+    return energy/1,117e+6
+}
+function joulesToBigMac(energy) {
+    // 1 BigMac = 2300kJ
+    return energy/2300000
+}
+
+wattsConsumption = {
+    "Google" : 29.5,
+    "Repos" : 27.5,
+    "Netflix" : 32,
+    "Jeux" : 49
+}
+
+function compute_total_enery (wattsConsumption, pcUsage) {
+    energy_total = 0
+    console.log(pcUsage)
+    Object.keys(pcUsage).forEach(function(key) {
+        energy_total += pcUsage[key] * wattsConsumption[key]
+    });
+    console.log(energy_total);
+    return energy_total
+}
+
+var gameUsage = 2, idlleUsage = 12, netflixUsage = 5, googleUsage = 2;
 var pcUsage = 0;
 
 var googleSlider, twitchSlider, netflixSlider, gameSlider, pcSlider;
 
 var pcDetails = {
     "Google": googleUsage,
-    "Twitch": twitchUsage,
+    "Repos": idlleUsage,
     "Netflix": netflixUsage,
     "Jeux": gameUsage
 }
 
 var pcColors = d3.scaleOrdinal()
-    .domain(["Google", "Twitch", "Netflix", "Jeux"])
+    .domain(["Google", "Repos", "Netflix", "Jeux"])
     .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b"]);
 
 
@@ -62,9 +93,8 @@ window.onload = () => {
     pcSlider = document.getElementById("pc");
 
 
-
     googleSlider.value = googleUsage;
-    twitchSlider.value = twitchUsage;
+    twitchSlider.value = idlleUsage;
     netflixSlider.value = netflixUsage;
     gameSlider.value = gameUsage;
 
@@ -77,7 +107,7 @@ window.onload = () => {
         refreshInterface();
     }
     twitchSlider.oninput = () => {
-        twitchUsage = parseInt(twitchSlider.value);
+        idlleUsage = parseInt(twitchSlider.value);
         refreshInterface();
     }
     googleSlider.oninput = () => {
@@ -85,7 +115,7 @@ window.onload = () => {
         refreshInterface();
     }
     pcSlider.oninput = () => {
-        console.log("input");
+        // console.log("input");
     }
 
     var svg = d3.select("#visu").append("svg").append("g");
@@ -137,32 +167,10 @@ window.onload = () => {
             .remove();
     }
 
-    var refreshInterface = function () {
-        var newPcUsage = gameUsage + twitchUsage + netflixUsage + googleUsage;
-        //TODO: check validitiy (SUM <= 24h)
-        pcUsage = newPcUsage;
-        pcSlider.value = pcUsage;
-        pcDetails = {
-            "Google": googleUsage,
-            "Twitch": twitchUsage,
-            "Netflix": netflixUsage,
-            "Jeux": gameUsage
-        }
-        
-        //TODO refresh D3
-        console.log(getData(pcDetails, pcColors));
-        refreshPie(getData(pcDetails, pcColors), pcColors);
-
-    }
-
-    refreshInterface();
-    renderViz(getData(pcDetails, pcColors));
-}
-
-function renderViz(dataset) {
-    var margin = {top: 40, right: 30, bottom: 30, left: 50},
-        width = 460 - margin.left - margin.right,
-        height = 320 - margin.top - margin.bottom;
+    dataset = getData(pcDetails, pcColors)
+    var margin_bars = {top: 40, right: 30, bottom: 30, left: 50},
+        width_bars = 460 - margin_bars.left - margin_bars.right,
+        height_bars = 320 - margin_bars.top - margin_bars.bottom;
 
     var greyColor = "#898989";
     var barColor = d3.interpolateInferno(0.4);
@@ -170,37 +178,37 @@ function renderViz(dataset) {
 
     var formatPercent = d3.format(".0%");
 
-    var svg = d3.select("body").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+    var svg_bars = d3.select("body").append("svg")
+        .attr("width", width_bars + margin_bars.left + margin_bars.right)
+        .attr("height", height_bars + margin_bars.top + margin_bars.bottom)
+        .attr("class", "barChart")
     .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform", "translate(" + margin_bars.left + "," + margin_bars.top + ")");
 
     var x = d3.scaleBand()
-        .range([0, width])
+        .range([0, width_bars])
             .padding(0.4);
     var y = d3.scaleLinear()
-        .range([height, 0]);
+        .range([height_bars, 0]);
 
     var xAxis = d3.axisBottom(x).tickSize([]).tickPadding(10);
     var yAxis = d3.axisLeft(y);
     // var yAxis = d3.axisLeft(y).tickFormat(formatPercent);
 
-    console.log(dataset);
+    // console.log(dataset);
     x.domain(dataset.map( d => { return d.label; }));
     y.domain([0, d3.max(dataset,  d => { return d.value; })]);
     // y.domain([0, 1]);
 
-    svg.append("g")
+    svg_bars.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
+        .attr("transform", "translate(0," + height_bars + ")")
         .call(xAxis);
-    svg.append("g")
+    svg_bars.append("g")
         .attr("class","y axis")
         .call(yAxis);
 
-    svg.selectAll(".bar")
-        .data(dataset)
+    svg_bars.selectAll(".bar").data(dataset)
         .enter().append("rect")
         .attr("class", "bar")
         .style("display", d => { return d.value === null ? "none" : null; })
@@ -210,7 +218,7 @@ function renderViz(dataset) {
             })
         .attr("x",  d => { return x(d.label); })
         .attr("width", x.bandwidth())
-            .attr("y",  d => { return height; })
+            .attr("y",  d => { return height_bars; })
             .attr("height", 0)
                 .transition()
                 .duration(750)
@@ -218,9 +226,9 @@ function renderViz(dataset) {
                     return i * 150;
                 })
         .attr("y",  d => { return y(d.value); })
-        .attr("height",  d => { return height - y(d.value); });
+        .attr("height",  d => { return height_bars - y(d.value); });
 
-    svg.selectAll(".label")        
+    svg_bars.selectAll(".label")        
         .data(dataset)
         .enter()
         .append("text")
@@ -231,7 +239,7 @@ function renderViz(dataset) {
                 return d.value === d3.max(dataset,  d => { return d.value; }) 
                 ? highlightColor : greyColor
                 })
-        .attr("y",  d => { return height; })
+        .attr("y",  d => { return height_bars; })
             .attr("height", 0)
                 .transition()
                 .duration(750)
@@ -239,4 +247,65 @@ function renderViz(dataset) {
         .text( d => { return d.value; })
         .attr("y",  d => { return y(d.value) + .1; })
         .attr("dy", "-.7em"); 
-  }
+
+    refreshChart = function (dataset) {
+        svg_bars.selectAll(".bar").data(dataset)
+        .attr("class", "bar")
+        .style("display", d => { return d.value === null ? "none" : null; })
+        .style("fill",  d => { 
+            return d.value === d3.max(dataset,  d => { return d.value; }) 
+            ? highlightColor : barColor
+            })
+        .attr("x",  d => { return x(d.label); })
+        .attr("width", x.bandwidth())
+            .attr("y",  d => { return height_bars; })
+            .attr("height", 0)
+                .transition()
+                .duration(750)
+                .delay(function (d, i) {
+                    return i * 150;
+                })
+        .attr("y",  d => { return y(d.value); })
+        .attr("height",  d => { return height_bars - y(d.value); });
+
+        svg_bars.selectAll(".label")        
+            .data(dataset)
+            .attr("class", "label")
+            .style("display",  d => { return d.value === null ? "none" : null; })
+            .attr("x", ( d => { return x(d.label) + (x.bandwidth() / 2) ; }))
+                .style("fill",  d => { 
+                    return d.value === d3.max(dataset,  d => { return d.value; }) 
+                    ? highlightColor : greyColor
+                    })
+            .attr("y",  d => { return height_bars; })
+                .attr("height", 0)
+                    .transition()
+                    .duration(750)
+                    .delay((d, i) => { return i * 150; })
+            .text( d => { return d.value; })
+            .attr("y",  d => { return y(d.value) + .1; })
+            .attr("dy", "-.7em");
+    }
+
+    var refreshInterface = function () {
+        var newPcUsage = gameUsage + idlleUsage + netflixUsage + googleUsage;
+        //TODO: check validitiy (SUM <= 24h)
+        pcUsage = newPcUsage;
+        pcSlider.value = pcUsage;
+        pcDetails = {
+            "Google": googleUsage,
+            "Repos": idlleUsage,
+            "Netflix": netflixUsage,
+            "Jeux": gameUsage
+        }
+        
+        //TODO refresh D3
+        // console.log(getData(pcDetails, pcColors));
+        refreshPie(getData(pcDetails, pcColors), pcColors);
+        refreshChart(getData(pcDetails, pcColors))
+        compute_total_enery(wattsConsumption, pcDetails)
+    }
+    refreshInterface();
+}
+
+
