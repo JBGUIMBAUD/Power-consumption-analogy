@@ -115,3 +115,14 @@
     height: 500px;
     position: relative;
   }
+
+  section {
+    float: left;
+    margin: auto;
+    width: 20%;
+  }
+  aside {
+    float: right;
+    margin: auto;
+    /* width: 30%; */
+  }

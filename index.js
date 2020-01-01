@@ -154,8 +154,8 @@ window.onload = () => {
     svg.append("g")
         .attr("class", "lines");
 
-    var width = 680,
-        height = 400,
+    var width = 340,
+        height = 200,
         radius = Math.min(width, height) / 2;
 
     var pie = d3.pie()
@@ -197,8 +197,8 @@ window.onload = () => {
 
     dataset = update_energy_data()
     var margin_bars = { top: 40, right: 30, bottom: 30, left: 50 },
-        width_bars = 680 - margin_bars.left - margin_bars.right,
-        height_bars = 400 - margin_bars.top - margin_bars.bottom;
+        width_bars = 510 - margin_bars.left - margin_bars.right,
+        height_bars = 300 - margin_bars.top - margin_bars.bottom;
 
     var greyColor = "#898989";
     var barColor = d3.interpolateInferno(0.4);
@@ -206,7 +206,7 @@ window.onload = () => {
 
     var formatPercent = d3.format(".0%");
 
-    var svg_bars = d3.select("body").append("svg")
+    var svg_bars = d3.select("body").select("#bar_chart").append("svg")
         .attr("width", width_bars + margin_bars.left + margin_bars.right)
         .attr("height", height_bars + margin_bars.top + margin_bars.bottom)
         .attr("class", "barChart")
