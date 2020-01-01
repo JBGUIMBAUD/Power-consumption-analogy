@@ -28,4 +28,9 @@ function createTicks(tick, skipStep=0) {
     for(let tick of ticks) {
         createTicks(tick, 6);
     }
+    renderViz()
+  }
+
+  function renderViz() {
+    
   }
