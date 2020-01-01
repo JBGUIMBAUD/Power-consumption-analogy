@@ -156,10 +156,10 @@ window.onload = () => {
     }
 
     refreshInterface();
-    renderViz();
+    renderViz(getData(pcDetails, pcColors));
 }
 
-function renderViz() {
+function renderViz(dataset) {
     var margin = {top: 40, right: 30, bottom: 30, left: 50},
         width = 460 - margin.left - margin.right,
         height = 320 - margin.top - margin.bottom;
@@ -183,17 +183,13 @@ function renderViz() {
         .range([height, 0]);
 
     var xAxis = d3.axisBottom(x).tickSize([]).tickPadding(10);
-    var yAxis = d3.axisLeft(y).tickFormat(formatPercent);
+    var yAxis = d3.axisLeft(y);
+    // var yAxis = d3.axisLeft(y).tickFormat(formatPercent);
 
-    var dataset = [{"year":"energie", "value": .07},
-                    {"year":"sport", "value": .13},
-                    {"year":"burguers", "value": .56},
-                    {"year":"courses", "value": .95},
-                    ];
-
-    x.domain(dataset.map( d => { return d.year; }));
-    // y.domain([0, d3.max(dataset,  d => { return d.value; })]);
-    y.domain([0, 1]);
+    console.log(dataset);
+    x.domain(dataset.map( d => { return d.label; }));
+    y.domain([0, d3.max(dataset,  d => { return d.value; })]);
+    // y.domain([0, 1]);
 
     svg.append("g")
         .attr("class", "x axis")
@@ -212,7 +208,7 @@ function renderViz() {
             return d.value === d3.max(dataset,  d => { return d.value; }) 
             ? highlightColor : barColor
             })
-        .attr("x",  d => { return x(d.year); })
+        .attr("x",  d => { return x(d.label); })
         .attr("width", x.bandwidth())
             .attr("y",  d => { return height; })
             .attr("height", 0)
@@ -230,7 +226,7 @@ function renderViz() {
         .append("text")
         .attr("class", "label")
         .style("display",  d => { return d.value === null ? "none" : null; })
-        .attr("x", ( d => { return x(d.year) + (x.bandwidth() / 2) -8 ; }))
+        .attr("x", ( d => { return x(d.label) + (x.bandwidth() / 2) ; }))
             .style("fill",  d => { 
                 return d.value === d3.max(dataset,  d => { return d.value; }) 
                 ? highlightColor : greyColor
@@ -240,7 +236,7 @@ function renderViz() {
                 .transition()
                 .duration(750)
                 .delay((d, i) => { return i * 150; })
-        .text( d => { return formatPercent(d.value); })
+        .text( d => { return d.value; })
         .attr("y",  d => { return y(d.value) + .1; })
         .attr("dy", "-.7em"); 
   }
