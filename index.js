@@ -181,7 +181,7 @@ window.onload = () => {
             .remove();
     }
 
-    dataset = getData(pcDetails, pcColors)
+    dataset = update_energy_data()
     var margin_bars = {top: 40, right: 30, bottom: 30, left: 50},
         width_bars = 460 - margin_bars.left - margin_bars.right,
         height_bars = 320 - margin_bars.top - margin_bars.bottom;
@@ -209,7 +209,6 @@ window.onload = () => {
     var yAxis = d3.axisLeft(y);
     // var yAxis = d3.axisLeft(y).tickFormat(formatPercent);
 
-    // console.log(dataset);
     x.domain(dataset.map( d => { return d.label; }));
     y.domain([0, d3.max(dataset,  d => { return d.value; })]);
     // y.domain([0, 1]);
@@ -314,17 +313,28 @@ window.onload = () => {
         }
         
         //TODO refresh D3
-        // console.log(getData(pcDetails, pcColors));
+        console.log(getData(pcDetails, pcColors));
         refreshPie(getData(pcDetails, pcColors), pcColors);
-        refreshChart(getData(pcDetails, pcColors))
+        refreshChart(update_energy_data())
         // print energies
-        tot_energy_w = compute_total_Watt_enery(wattsConsumption, pcDetails)
-        tot_energy = wattToJoules(tot_energy_w)
-        joulesToWalk(tot_energy)
-        joulesToRun(tot_energy)
-        joulesToBigMac(tot_energy)
+        // dataset = update_energy_data()
     }
     refreshInterface();
+
+    function update_energy_data() {
+        tot_energy_w = compute_total_Watt_enery(wattsConsumption, pcDetails)
+        tot_energy = wattToJoules(tot_energy_w)
+        walk = joulesToWalk(tot_energy)
+        run = joulesToRun(tot_energy)
+        burger = joulesToBigMac(tot_energy)
+
+        data = [
+            {"label": "time walking(h.)", "value": walk},
+            {"label": "time running (h.)", "value": run},
+            {"label": "Big Macs", "value": burger}
+        ]
+        return data
+    }
 }
 
 
