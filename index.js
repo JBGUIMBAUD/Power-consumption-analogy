@@ -1,65 +1,66 @@
 
 function wattToDailyJoules(w, durationInHours) {
     res = durationInHours * 3600 * w;
-    console.log("Total energy(J: ", res)
+    // console.log("Total energy(J: ", res)
     return res
 }
 
 function wattToJoules(w_enery) {
+    // 1 J = 1 W/s.
     res = w_enery * 3600
-    console.log("Equivalent in Joules", res)
+    // console.log("Equivalent in Joules", res)
     return res
 }
 
 function joulesToRun(energy) {
     // 1h running = 770kcal/h = 3,2e+6 J
     res = energy / 3.2e6
-    console.log("Hours to run: ", res)
+    // console.log("Hours to run: ", res)
     return res
 }
 
 function joulesToWalk(energy) {
     // 1h walking = 267 kcal/h = 1,117e+6 J
     res = energy / 1.117e6
-    console.log("Hours to walk: ", res)
+    // console.log("Hours to walk: ", res)
     return res
 }
 
 function joulesToCycle(energy) {
     // 1h cycling = 402 kcal/h = 1,682e+6
     res = energy / 1.682e6
-    console.log("Hours to cycle", res)
+    // console.log("Hours to cycle", res)
     return res
 }
 
 function joulesToSwim(energy) {
     // 1h swimming = 1071 kcal/h = 4481064 J
     res = energy / 4481064
-    console.log("Hours to swim", res)
+    // console.log("Hours to swim", res)
     return res
 }
 function joulesToBigMac(energy) {
     // 1 BigMac = 2300kJ
     res = energy / 2300000
-    console.log("Number of BigMac: ", res)
+    // console.log("Number of BigMac: ", res)
     return res
 }
 
-// laptop
-wattsConsumption = {
-    "Google": 32.5,
-    "Repos": 34.5,
-    "Netflix": 40.5,
-    "Jeux": 109
+function compute_total_Watt_enery(wattsConsumption, pcDetails) {
+    energy_total = 0
+    Object.keys(pcDetails).forEach(function (key) {
+        energy_total += pcDetails[key] * wattsConsumption[key]
+    });
+    return energy_total
 }
 
-function compute_total_Watt_enery(wattsConsumption, pcUsage) {
-    energy_total = 0
-    Object.keys(pcUsage).forEach(function (key) {
-        energy_total += pcUsage[key] * wattsConsumption[key]
-    });
-    console.log(energy_total);
-    return energy_total
+function compute_watt_energy(wattsConsumption, pc_detailed_duration) {
+    dict = {}
+    for (key in pc_detailed_duration) {
+        dict[key] = pc_detailed_duration[key] * wattsConsumption[key]
+    }
+    // console.log(dict)
+    return dict
 }
 
 var gameUsage = 2, idlleUsage = 12, netflixUsage = 5, googleUsage = 2;
@@ -72,6 +73,14 @@ var pcDetails = {
     "Repos": idlleUsage,
     "Netflix": netflixUsage,
     "Jeux": gameUsage
+}
+
+// laptop
+wattsConsumption = {
+    "Google": 32.5,
+    "Repos": 34.5,
+    "Netflix": 40.5,
+    "Jeux": 109
 }
 
 var pcColors = d3.scaleOrdinal()
@@ -165,7 +174,7 @@ window.onload = () => {
         });
 
 
-    svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    svg.attr("transform", "translate(" + width / 2 + "," + height / 1.5 + ")");
 
     var refreshPie = function (data, colors) {
 
@@ -196,9 +205,13 @@ window.onload = () => {
     }
 
     dataset = update_energy_data()
+
+    subgroups = ["repos", "google", "jeux", "netflix"]
+    console.log("subgroups", subgroups)
+
     var margin_bars = { top: 40, right: 30, bottom: 30, left: 50 },
-        width_bars = 510 - margin_bars.left - margin_bars.right,
-        height_bars = 300 - margin_bars.top - margin_bars.bottom;
+        width_bars = 600 - margin_bars.left - margin_bars.right,
+        height_bars = 400 - margin_bars.top - margin_bars.bottom;
 
     var greyColor = "#898989";
     var barColor = d3.interpolateInferno(0.4);
@@ -213,20 +226,57 @@ window.onload = () => {
         .append("g")
         .attr("transform", "translate(" + margin_bars.left + "," + margin_bars.top + ")");
 
+    // Prep the tooltip bits, initial display is hidden
+    var tooltip = d3.select("body").select("#bar_chart").select("svg").append("g")
+        .attr("class", "tooltip")
+        .style("display", "none");
+        
+    tooltip.append("rect")
+        .attr("width", 60)
+        .attr("height", 20)
+        .attr("fill", "white")
+        .style("opacity", 0.2);
+
+    tooltip.append("text")
+        .attr("x", 30)
+        .attr("dy", "1.2em")
+        .style("text-anchor", "middle")
+        .attr("font-size", "16px")
+        .attr("font-weight", "bold");
+
     var x = d3.scaleBand()
         .range([0, width_bars])
         .padding(0.4);
     var y = d3.scaleLinear()
-        .range([height_bars, 0]);
+        .range([height_bars , 0]);
+
+    var color = d3.scaleOrdinal(d3.schemeCategory10).domain(subgroups);
+
+    //stack the data? --> stack per subgroup
+    var stack = d3.stack()
+        .keys(subgroups)
+        .order(d3.stackOrderNone)
+        .offset(d3.stackOffsetNone);
+    var stackedData = stack(dataset)
+    console.log(stackedData)
 
     var xAxis = d3.axisBottom(x).tickSize([]).tickPadding(10);
     var yAxis = d3.axisLeft(y);
     // var yAxis = d3.axisLeft(y).tickFormat(formatPercent);
 
-    x.domain(dataset.map(d => { return d.label; }));
-    y.domain([0, d3.max(dataset, d => { return d.value; })]);
+    labels = ["time walking(h.)", "time running (h.)", "time cycling (h.)", "time swimming (h.)", "Big Macs"]
+    x.domain(labels);
+    // y.domain([0, d3.max(dataset, d => { return d.value; })]);
     // console.log(pcUsage)
-    // y.domain([0, 1]);
+    y.domain([0, d3.max(stackedData, function(d) {
+        array = []
+        array.push(d3.max(d, function(d) {
+            console.log(d.data.repos + d.data.google + d.data.netflix + d.data.jeux)
+            return d.data.repos + d.data.google + d.data.netflix + d.data.jeux
+        }))
+        // console.log(array)
+        return array
+    })]);
 
     svg_bars.append("g")
         .attr("class", "x axis")
@@ -236,51 +286,91 @@ window.onload = () => {
         .attr("class", "yaxis")
         .call(yAxis);
 
-    svg_bars.selectAll(".bar").data(dataset)
-        .enter().append("rect")
-        .attr("class", "bar");
+    to_update = svg_bars.selectAll(".bar").data(stackedData)
+        .enter().append("g")
+        .attr("fill", function(d) {
+            // console.log(d.key)
+            return color(d.key); 
+        })
+        .attr("class", "bar")
+        .selectAll("rect")
+        .data(function(d) {return d; })
+            .enter().append("rect")
+                .attr("x", function(d) {
+                    console.log("d",d.data.label)
+                    return x(d.data.label); 
+                })
+                .attr("y", function(d) { return y(d[1]); })
+                .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+                .attr("width",x.bandwidth())
+            .on("mouseover", function() { tooltip.style("display", null); })
+            .on("mouseout", function() { tooltip.style("display", "none"); })
+            .on("mousemove", function(d) {
+                console.log(d);
+                var xPosition = d3.mouse(this)[0]+10;
+                var yPosition = d3.mouse(this)[1]+10;
+                tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+                tooltip.select("text").text(d3.format(".1f")(d[1]-d[0]));
+            });
 
-    svg_bars.selectAll(".label")
-        .data(dataset)
-        .enter()
-        .append("text")
-        .attr("class", "label")
+    var legend = svg_bars.append("g")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", 10)
+        .attr("text-anchor", "end")
+        .selectAll("g")
+        .data(subgroups.slice().reverse())
+        .enter().append("g")
+        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+    
+    legend.append("rect")
+        .attr("x", width_bars - 19)
+        .attr("width", 19)
+        .attr("height", 19)
+        .attr("fill", color);
+    
+    legend.append("text")
+        .attr("x", width_bars - 24)
+        .attr("y", 9.5)
+        .attr("dy", "0.32em")
+        .text(function(d) { return d; });
+
+    // svg_bars.selectAll(".label")
+    //     .data(dataset)
+    //     .enter()
+    //     .append("text")
+    //     .attr("class", "label")
 
     refreshChart = function (dataset) {
-        // yAxis = d3.axisLeft(y);
-        var t = d3.transition()
-        .duration(500)
-
-        y.domain([0, d3.max(dataset, d => { return d.value; })]);
+        y.domain([0, d3.max(stackedData, function(d) {
+            array = []
+            array.push(d3.max(d, function(d) {
+                console.log(d.data.repos + d.data.google + d.data.netflix + d.data.jeux)
+                return d.data.repos + d.data.google + d.data.netflix + d.data.jeux
+            }))
+            return array
+        })]);
         yAxis.scale(y);
 
-        svg_bars.selectAll(".bar").data(dataset)
-            .style("display", d => { return d.value === null ? "none" : null; })
-            .style("fill", d => {
-                return d.value === d3.max(dataset, d => { return d.value; })
-                    ? highlightColor : barColor
-            })
-            .attr("x", d => { return x(d.label); })
-            .attr("width", x.bandwidth())
-            .attr("y", d => { return height_bars; })
-            .attr("height", 0)
-            .attr("y", d => { return y(d.value); })
-            .attr("height", d => { return height_bars - y(d.value); });
+        svg_bars.selectAll(".bar")
+            .selectAll("rect")
+                .attr("y", function(d) { return y(d[1]); })
+                .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+        console.log(svg_bars.selectAll(".bar").data(stackedData)
+        .selectAll("rect"))
 
-        svg_bars.selectAll(".label")
-            .data(dataset)
-            .attr("class", "label")
-            .style("display", d => { return d.value === null ? "none" : null; })
-            .attr("x", (d => { return x(d.label) + (x.bandwidth() / 2); }))
-            .style("fill", d => {
-                return d.value === d3.max(dataset, d => { return d.value; })
-                    ? highlightColor : greyColor
-            })
-            .attr("y", d => { return height_bars; })
-            .attr("height", 0)
-            .text(d => { return d3.format(".1f")(d.value) })
-            .attr("y", d => { return y(d.value) + .1; })
-            .attr("dy", "-.7em");
+        // svg_bars.selectAll(".label")
+        //     .data(dataset)
+        //     .attr("class", "label")
+        //     // .style("display", d => { return d.value === null ? "none" : null; })
+        //     .attr("x", (d => { return x(d.label) + (x.bandwidth() / 2); }))
+        //     .style("fill", d => {
+        //         return d.value === d3.max(dataset, d => { return d.value; })
+        //             ? highlightColor : greyColor
+        //     })
+        //     .attr("height", 0)
+        //     .text(d => { return d3.format(".1f")(d.value) })
+        //     .attr("y", d => { return y(d.value) + .1; })
+        //     .attr("dy", "-.7em");
 
         svg_bars
             .select(".yaxis")
@@ -300,7 +390,7 @@ window.onload = () => {
         }
 
         //TODO refresh D3
-        console.log(getData(pcDetails, pcColors));
+        // console.log(getData(pcDetails, pcColors));
         refreshPie(getData(pcDetails, pcColors), pcColors);
         refreshChart(update_energy_data())
         // print energies
@@ -308,22 +398,58 @@ window.onload = () => {
     }
     refreshInterface();
 
+    
     function update_energy_data() {
-        tot_energy_w = compute_total_Watt_enery(wattsConsumption, pcDetails)
-        tot_energy = wattToJoules(tot_energy_w)
-        walk = joulesToWalk(tot_energy)
-        run = joulesToRun(tot_energy)
-        cycle = joulesToCycle(tot_energy)
-        swim = joulesToSwim(tot_energy)
-        burger = joulesToBigMac(tot_energy)
+        // tot_energy_w = compute_total_Watt_enery(wattsConsumption, pcDetails)
+        // tot_energy = wattToJoules(tot_energy_w)
+        // walk = joulesToWalk(tot_energy)
+        // run = joulesToRun(tot_energy)
+        // cycle = joulesToCycle(tot_energy)
+        // swim = joulesToSwim(tot_energy)
+        // burger = joulesToBigMac(tot_energy)
 
-        data = [
-            { "label": "time walking(h.)", "value": walk },
-            { "label": "time running (h.)", "value": run },
-            { "label": "time cycling (h.)", "value": cycle },
-            { "label": "time swimming (h.)", "value": swim },
-            { "label": "Big Macs", "value": burger }
-        ]
+        labels = ["time walking(h.)", "time running (h.)", "time cycling (h.)", "time swimming (h.)", "Big Macs"]
+        data = []
+        watt_energies = compute_watt_energy(wattsConsumption, pcDetails)
+        // console.log("energies", watt_energies)
+        for (i in labels) {
+            label = labels[i]
+            iddle = compute_energy_joules(wattToJoules(watt_energies.Repos), label)
+            google = compute_energy_joules(wattToJoules(watt_energies.Google), label)
+            netflix = compute_energy_joules(wattToJoules(watt_energies.Netflix), label)
+            game = compute_energy_joules(wattToJoules(watt_energies.Jeux), label)
+            data.push({"label": label, "repos": iddle,"google": google, "netflix": netflix, "jeux": game})
+        }
+        console.log(data)
+
+
+        // data = [
+        //     { "label": "time walking(h.)", "value": walk },
+        //     { "label": "time running (h.)", "value": run },
+        //     { "label": "time cycling (h.)", "value": cycle },
+        //     { "label": "time swimming (h.)", "value": swim },
+        //     { "label": "Big Macs", "value": burger }
+        // ]
         return data
+    }
+
+    function compute_energy_joules(energy, label) {
+        switch (label) {
+            case "time walking(h.)":
+                return joulesToWalk(energy)
+                break;
+            case "time running (h.)":
+                return joulesToRun(energy)
+            case "time cycling (h.)":
+                return joulesToCycle(energy)
+                break;
+            case "time swimming (h.)":
+                return joulesToSwim(energy)
+                break;
+            case "Big Macs":
+                return joulesToBigMac(energy)
+            default:
+              console.log("Error with labels");
+        }
     }
 }
