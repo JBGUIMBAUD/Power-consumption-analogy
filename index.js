@@ -341,22 +341,20 @@ window.onload = () => {
     //     .attr("class", "label")
 
     refreshChart = function (dataset) {
-        y.domain([0, d3.max(stackedData, function(d) {
+        y.domain([0, d3.max(stack(dataset), function (d) {
             array = []
-            array.push(d3.max(d, function(d) {
-                console.log(d.data.repos + d.data.google + d.data.netflix + d.data.jeux)
+            array.push(d3.max(d, function (d) {
                 return d.data.repos + d.data.google + d.data.netflix + d.data.jeux
             }))
             return array
         })]);
         yAxis.scale(y);
-
-        svg_bars.selectAll(".bar")
+ 
+        svg_bars.selectAll(".bar").data(stack(dataset))
             .selectAll("rect")
-                .attr("y", function(d) { return y(d[1]); })
-                .attr("height", function(d) { return y(d[0]) - y(d[1]); })
-        console.log(svg_bars.selectAll(".bar").data(stackedData)
-        .selectAll("rect"))
+            .data(function (d) { return d; })
+            .attr("y", function (d) { return y(d[1]); })
+            .attr("height", function (d) { return y(d[0]) - y(d[1]); })
 
         // svg_bars.selectAll(".label")
         //     .data(dataset)
