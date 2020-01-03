@@ -63,10 +63,10 @@ function compute_watt_energy(wattsConsumption, pc_detailed_duration) {
     return dict
 }
 
-var gameUsage = 2, idlleUsage = 12, netflixUsage = 5, googleUsage = 2;
+var gameUsage = 2, idlleUsage = 12, netflixUsage = 5, googleUsage = 2, isLaptop = 0;
 var pcUsage = 0;
 
-var googleSlider, twitchSlider, netflixSlider, gameSlider, pcSlider;
+var googleSlider, twitchSlider, netflixSlider, gameSlider, pcSlider, isLaptopSlider;
 
 var pcDetails = {
     "Google": googleUsage,
@@ -76,12 +76,19 @@ var pcDetails = {
 }
 
 // laptop
-wattsConsumption = {
-    "Google": 32.5,
-    "Repos": 34.5,
+var watts_consumption_laptop = {
+    "Repos": 32.5,
+    "Google": 34.5,
     "Netflix": 40.5,
     "Jeux": 109
 }
+var watts_consumption_desktop = {
+    "Repos": 132.5,
+    "Google": 150.5,
+    "Netflix": 190.5,
+    "Jeux": 300
+}
+var wattsConsumption = watts_consumption_desktop;
 
 var pcColors = d3.scaleOrdinal()
     .domain(["Repos","Google", "Netflix", "Jeux"])
@@ -128,12 +135,14 @@ window.onload = () => {
     netflixSlider = document.getElementById("netflix");
     gameSlider = document.getElementById("jeux");
     pcSlider = document.getElementById("pc");
-
+    isLaptopSlider = document.getElementById("isLaptop");
+    console.log(isLaptopSlider)
 
     googleSlider.value = googleUsage;
     twitchSlider.value = idlleUsage;
     netflixSlider.value = netflixUsage;
     gameSlider.value = gameUsage;
+    // isLaptopSlider.value = isLaptop;
 
     gameSlider.oninput = () => {
         gameUsage = parseInt(gameSlider.value);
@@ -153,6 +162,16 @@ window.onload = () => {
     }
     pcSlider.oninput = () => {
         // console.log("input");
+    }
+    isLaptopSlider.oninput = () => {
+        isLaptop = isLaptopSlider.checked;
+        console.log(isLaptop)
+        if (isLaptop) {
+            wattsConsumption = watts_consumption_laptop
+        } else {
+            wattsConsumption = watts_consumption_desktop
+        }
+        refreshInterface();
     }
 
     var svg = d3.select("#visu").append("svg").append("g");
@@ -207,7 +226,6 @@ window.onload = () => {
     dataset = update_energy_data()
 
     subgroups = ["repos", "google", "netflix", "jeux"]
-    console.log("subgroups", subgroups.reverse())
 
     var margin_bars = { top: 40, right: 30, bottom: 30, left: 50 },
         width_bars = 600 - margin_bars.left - margin_bars.right,
@@ -258,7 +276,6 @@ window.onload = () => {
         .order(d3.stackOrderNone)
         .offset(d3.stackOffsetNone);
     var stackedData = stack(dataset)
-    console.log(stackedData)
 
     var xAxis = d3.axisBottom(x).tickSize([]).tickPadding(10);
     var yAxis = d3.axisLeft(y);
@@ -271,7 +288,7 @@ window.onload = () => {
     y.domain([0, d3.max(stackedData, function(d) {
         array = []
         array.push(d3.max(d, function(d) {
-            console.log(d.data.repos + d.data.google + d.data.netflix + d.data.jeux)
+            // console.log(d.data.repos + d.data.google + d.data.netflix + d.data.jeux)
             return d.data.repos + d.data.google + d.data.netflix + d.data.jeux
         }))
         // console.log(array)
@@ -297,7 +314,7 @@ window.onload = () => {
         .data(function(d) {return d; })
             .enter().append("rect")
                 .attr("x", function(d) {
-                    console.log("d",d.data.label)
+                    // console.log("d",d.data.label)
                     return x(d.data.label); 
                 })
                 .attr("y", function(d) { return y(d[1]); })
@@ -306,7 +323,7 @@ window.onload = () => {
             .on("mouseover", function() { tooltip.style("display", null); })
             .on("mouseout", function() { tooltip.style("display", "none"); })
             .on("mousemove", function(d) {
-                console.log(d);
+                // console.log(d);
                 var xPosition = d3.mouse(this)[0]+10;
                 var yPosition = d3.mouse(this)[1]+10;
                 tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
@@ -418,7 +435,7 @@ window.onload = () => {
             game = compute_energy_joules(wattToJoules(watt_energies.Jeux), label)
             data.push({"label": label, "repos": iddle,"google": google, "netflix": netflix, "jeux": game})
         }
-        console.log(data)
+        // console.log(data)
 
 
         // data = [
