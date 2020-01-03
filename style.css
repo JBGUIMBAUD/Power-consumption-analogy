@@ -11,8 +11,8 @@
     font-family: sans-serif;
     font-size: 20px;
     line-height: 20px;
-    color: black;
-    background: azure;
+    color: white;
+    background-color: #47453e;
     /* background-image: url('QERreport.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -116,16 +116,7 @@
     position: relative;
   }
 
-  section {
-    float: left;
-    margin: auto;
-    width: 20%;
-  }
-  aside {
-    float: right;
-    margin: auto;
-    /* width: 30%; */
-  }
+
 
   /* Sliders */
    /* The switch - the box around the slider */
@@ -189,4 +180,24 @@ input:checked + .toggle_slider:before {
 
 .toggle_slider.round:before {
   border-radius: 50%;
-} 
+}
+
+
+/* .content {
+  display: grid;
+  grid-template-columns: 100px 0.5fr 1fr;
+  grid-gap: 10px;
+  grid-template-rows: auto;
+}
+.slider_menu {
+  grid-column: 1;
+  grid-row: 1;
+}
+.main_viz { 
+  grid-column: 3;
+  grid-row: 1;
+}
+.mini_pie { 
+  grid-column: 2;
+  grid-row: 1 / 3;
+} /*/

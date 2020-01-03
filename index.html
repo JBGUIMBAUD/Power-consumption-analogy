@@ -6,57 +6,59 @@
         <link rel="stylesheet" href="/charts.css">
     </head>
     <body>
-        <section>
-            <div class="slider_group">
-                <!-- Rectangular switch -->
-                <label>PC portable ?</label>
-                <label class="switch">
-                    <input type="checkbox" id="isLaptop">
-                    <span class="toggle_slider"></span>
-                </label>
-                <br>
-                <label>Utilisation du PC (en h/jour)</label>
-                <div class="range">
-                    <input type="range" min="0" max="24" class="slider" id="pc">
-                </div>
-            </div>
-            <div class="details">
-                <h3>Détails de l'utilisation</h3>
+        <div class="content">
+            <section class="slider_menu">
                 <div class="slider_group">
-                        <label>Repos</label>
+                    <!-- Rectangular switch -->
+                    <label>PC portable ?</label>
+                    <label class="switch">
+                        <input type="checkbox" id="isLaptop">
+                        <span class="toggle_slider"></span>
+                    </label>
+                    <br>
+                    <label>Utilisation du PC (en h/jour)</label>
                     <div class="range">
-                        <input type="range" min="0" max="24" class="slider"id="twitch">
-                    </div>
-
-                </div>
-                <div class="slider_group">
-                    <label>Google</label>
-                    <div class="range">
-                        <input type="range" min="0" max="24" class="slider" id="google">
+                        <input type="range" min="0" max="24" class="slider" id="pc">
                     </div>
                 </div>
-                <div class="slider_group">
+                <div class="details">
+                    <h3>Détails de l'utilisation</h3>
+                    <div class="slider_group">
+                            <label>Repos</label>
+                        <div class="range">
+                            <input type="range" min="0" max="24" class="slider"id="twitch">
+                        </div>
     
-                    <label>Netflix</label>
-                    <div class="range">
-                        <input type="range" min="0" max="24" class="slider" id="netflix">
                     </div>
-                </div> 
-                <div class="slider_group">
-    
-                    <label>Jeux</label>
-                    <div class="range">
-                        <input type="range" min="0" max="24" class="slider" id="jeux">
+                    <div class="slider_group">
+                        <label>Google</label>
+                        <div class="range">
+                            <input type="range" min="0" max="24" class="slider" id="google">
+                        </div>
                     </div>
-                </div> 
-            </div>
-        </section>
-        <section>
-            <div id="visu"></div>
-        </section>
-        <aside>
-            <div id="bar_chart"></div>
-        </aside>
+                    <div class="slider_group">
+        
+                        <label>Netflix</label>
+                        <div class="range">
+                            <input type="range" min="0" max="24" class="slider" id="netflix">
+                        </div>
+                    </div> 
+                    <div class="slider_group">
+        
+                        <label>Jeux</label>
+                        <div class="range">
+                            <input type="range" min="0" max="24" class="slider" id="jeux">
+                        </div>
+                    </div> 
+                </div>
+            </section>
+            <section class = "mini_pie">
+                <div id="visu"></div>
+            </section>
+            <aside class= "main_viz">
+                <div id="bar_chart"></div>
+            </aside>
+        </div>
         <script src="https://d3js.org/d3.v5.min.js"></script>
         <script src="/index.js"></script>
     </body>

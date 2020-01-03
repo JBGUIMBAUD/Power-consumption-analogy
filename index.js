@@ -349,6 +349,7 @@ window.onload = () => {
         .attr("x", width_bars - 24)
         .attr("y", 9.5)
         .attr("dy", "0.32em")
+        .style('fill', 'white')
         .text(function(d) { return d; });
 
     // svg_bars.selectAll(".label")
