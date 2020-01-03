@@ -84,7 +84,7 @@ wattsConsumption = {
 }
 
 var pcColors = d3.scaleOrdinal()
-    .domain(["Google", "Repos", "Netflix", "Jeux"])
+    .domain(["Repos","Google", "Netflix", "Jeux"])
     .range(["#004c6d", "#4c7c9b", "#86b0cc", "#c1e7ff"]);
 
 
@@ -206,8 +206,8 @@ window.onload = () => {
 
     dataset = update_energy_data()
 
-    subgroups = ["repos", "google", "jeux", "netflix"]
-    console.log("subgroups", subgroups)
+    subgroups = ["repos", "google", "netflix", "jeux"]
+    console.log("subgroups", subgroups.reverse())
 
     var margin_bars = { top: 40, right: 30, bottom: 30, left: 50 },
         width_bars = 600 - margin_bars.left - margin_bars.right,
