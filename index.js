@@ -85,7 +85,7 @@ wattsConsumption = {
 
 var pcColors = d3.scaleOrdinal()
     .domain(["Google", "Repos", "Netflix", "Jeux"])
-    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b"]);
+    .range(["#004c6d", "#4c7c9b", "#86b0cc", "#c1e7ff"]);
 
 
 function key(d) { return d.data.label; };
@@ -250,7 +250,7 @@ window.onload = () => {
     var y = d3.scaleLinear()
         .range([height_bars , 0]);
 
-    var color = d3.scaleOrdinal(d3.schemeCategory10).domain(subgroups);
+    var color = d3.scaleOrdinal(["#004c6d", "#4c7c9b", "#86b0cc", "#c1e7ff"]).domain(subgroups);
 
     //stack the data? --> stack per subgroup
     var stack = d3.stack()
