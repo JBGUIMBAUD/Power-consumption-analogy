@@ -26,7 +26,7 @@ EXEMPLES :
   * 150.15 Wh = 48 min de marche à 4 Km/h (pour 65 kilos / homme)
   * pour 14h d'utilisation : 2102.1 Wh
 
-Pour mon métabolisme au repos il me faudrait **1683 KCalories** de bouffe pour survivre :
+Pour mon métabolisme au repos il me faudrait **1683 KCalories** de nourriture pour survivre :
 * homme
 * 25 ans
 * 65 kg
