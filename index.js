@@ -182,8 +182,8 @@ window.onload = () => {
     svg.append("g")
         .attr("class", "lines");
 
-    var width = 340,
-        height = 200,
+    var width = 200,
+        height = 100,
         radius = Math.min(width, height) / 2;
 
     var pie = d3.pie()
@@ -193,7 +193,7 @@ window.onload = () => {
         });
 
 
-    svg.attr("transform", "translate(" + width / 2 + "," + height / 1.5 + ")");
+    svg.attr("transform", "translate(" + width /2+ "," + height /1.7 + ")");
 
     var refreshPie = function (data, colors) {
 
@@ -225,11 +225,11 @@ window.onload = () => {
 
     dataset = update_energy_data()
 
-    subgroups = ["repos", "google", "netflix", "jeux"]
+    subgroups = ["Repos", "Google", "Netflix", "Jeux"]
 
     var margin_bars = { top: 40, right: 30, bottom: 30, left: 50 },
-        width_bars = 600 - margin_bars.left - margin_bars.right,
-        height_bars = 400 - margin_bars.top - margin_bars.bottom;
+        width_bars = 700 - margin_bars.left - margin_bars.right,
+        height_bars = 600;
 
     var greyColor = "#898989";
     var barColor = d3.interpolateInferno(0.4);
@@ -332,12 +332,12 @@ window.onload = () => {
 
     var legend = svg_bars.append("g")
         .attr("font-family", "sans-serif")
-        .attr("font-size", 10)
+        .attr("font-size", 20)
         .attr("text-anchor", "end")
         .selectAll("g")
         .data(subgroups.slice().reverse())
         .enter().append("g")
-        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+        .attr("transform", function(d, i) { return "translate(0," + i * 40 + ")"; });
     
     legend.append("rect")
         .attr("x", width_bars - 19)
@@ -362,7 +362,7 @@ window.onload = () => {
         y.domain([0, d3.max(stack(dataset), function (d) {
             array = []
             array.push(d3.max(d, function (d) {
-                return d.data.repos + d.data.google + d.data.netflix + d.data.jeux
+                return d.data.Repos + d.data.Google + d.data.Netflix + d.data.Jeux
             }))
             return array
         })]);
@@ -434,7 +434,7 @@ window.onload = () => {
             google = compute_energy_joules(wattToJoules(watt_energies.Google), label)
             netflix = compute_energy_joules(wattToJoules(watt_energies.Netflix), label)
             game = compute_energy_joules(wattToJoules(watt_energies.Jeux), label)
-            data.push({"label": label, "repos": iddle,"google": google, "netflix": netflix, "jeux": game})
+            data.push({"label": label, "Repos": iddle,"Google": google, "Netflix": netflix, "Jeux": game})
         }
         // console.log(data)
 
