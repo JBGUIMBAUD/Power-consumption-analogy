@@ -202,3 +202,49 @@ input:checked + .toggle_slider:before {
   grid-column: 1 / 3;
   grid-row: 0;
 }
+
+.body_sources table {
+  width: 100%;
+}
+
+.body_sources table, th, td {
+  border: 1px solid black;
+  margin-bottom: 1em;
+  color: Gainsboro;
+}
+
+.body_sources th{
+  text-align: left;
+}
+
+.body_sources td {
+  padding-left: 8em;
+  padding-right: 8em;
+  text-align: center;
+  margin: auto;
+}
+
+.body_sources{
+  width: 99%;
+}
+
+a {
+  color: Gainsboro;
+}
+
+a:hover {
+  color: DeepSkyBlue;
+}
+
+.body_sources h2{
+  margin-top: 2em;
+}
+
+footer {
+  width: 100%;
+  border-top: 0.1em solid #1f1f14;
+  margin-top: 5em;
+  margin-bottom: 1.5em;
+  padding-top: 1.5em;
+  text-align: center;
+}
