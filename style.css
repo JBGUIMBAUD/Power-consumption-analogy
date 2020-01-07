@@ -243,8 +243,15 @@ a:hover {
 footer {
   width: 100%;
   border-top: 0.1em solid #1f1f14;
-  margin-top: 5em;
   margin-bottom: 1.5em;
   padding-top: 1.5em;
+  text-align: center;
+}
+
+.main_viz {
+  border-left: 0.1em solid #1f1f14;
+}
+
+.main_title {
   text-align: center;
 }
