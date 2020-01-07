@@ -200,7 +200,7 @@ window.onload = () => {
         var slice = svg.select(".slices").selectAll("path.slice")
             .data(pie(data));
         slice.enter()
-            .insert("path")
+            .append("path")
             .attr('d', d3.arc()
                 .innerRadius(radius * 0.8)
                 .outerRadius(radius)
@@ -209,6 +209,16 @@ window.onload = () => {
             .attr("stroke", "black")
             .style("stroke-width", "2px")
             .style("opacity", 1)
+            .on('mouseover', function (d, i) {
+                d3.select(this).transition()
+                     .duration('50')
+                     .attr('opacity', '.85')
+            })
+            .on('mouseout', function (d, i) {
+                d3.select(this).transition()
+                     .duration('50')
+                     .attr('opacity', '1');
+            })
         /* slice		
             .transition().duration(1000)
             .attrTween("d", function(d) {
@@ -320,8 +330,18 @@ window.onload = () => {
                 .attr("y", function(d) { return y(d[1]); })
                 .attr("height", function(d) { return y(d[0]) - y(d[1]); })
                 .attr("width",x.bandwidth())
-            .on("mouseover", function() { tooltip.style("display", null); })
-            .on("mouseout", function() { tooltip.style("display", "none"); })
+            .on("mouseover", function() {
+                tooltip.style("display", null);
+                d3.select(this).transition()
+                    .duration('50')
+                    .attr('opacity', '.8')
+            })
+            .on("mouseout", function() {
+                tooltip.style("display", "none");
+                d3.select(this).transition()
+                    .duration('50')
+                    .attr('opacity', '1')
+            })
             .on("mousemove", function(d) {
                 // console.log(d);
                 var xPosition = d3.mouse(this)[0]+10;

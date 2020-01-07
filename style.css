@@ -3,6 +3,7 @@
     width: 200px;
     margin: 10px;
 }
+
 * {
     box-sizing: border-box;
   }
@@ -199,5 +200,5 @@ input:checked + .toggle_slider:before {
 }
 .mini_pie { 
   grid-column: 1 / 3;
-  grid-row: 1;
-} 
+  grid-row: 0;
+}
