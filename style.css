@@ -268,5 +268,11 @@ footer {
 .switch_wrapper{
   float:left; 
 }
+footer a {
+  display: block;
+  padding-top: 1em;
+}
 
-.inline { float:left; }
+footer a:first-child {
+  padding-top: 0em;
+}
