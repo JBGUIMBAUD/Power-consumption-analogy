@@ -9,6 +9,10 @@
   }
   
   body {
+    /* center on page */
+    max-width: 960px;
+    margin: auto;
+
     font-family: sans-serif;
     font-size: 20px;
     line-height: 20px;
