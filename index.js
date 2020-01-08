@@ -91,7 +91,7 @@ var watts_consumption_desktop = {
 var wattsConsumption = watts_consumption_desktop;
 
 var pcColors = d3.scaleOrdinal()
-    .domain(["Repos","Google", "Netflix", "Jeux"])
+    .domain(["Repos","Google", "Netflix", "Jeux"].reverse())
     .range(["#004c6d", "#4c7c9b", "#86b0cc", "#c1e7ff"]);
 
 
@@ -145,23 +145,66 @@ window.onload = () => {
     // isLaptopSlider.value = isLaptop;
 
     gameSlider.oninput = () => {
-        gameUsage = parseInt(gameSlider.value);
+        var next = parseInt(gameSlider.value);
+        if(next + idlleUsage + netflixUsage + googleUsage > 24) {
+            next = next - (next + idlleUsage + netflixUsage + googleUsage  - 24)
+            gameSlider.value = next;
+        }
+        gameUsage = next;
         refreshInterface();
     }
     netflixSlider.oninput = () => {
-        netflixUsage = parseInt(netflixSlider.value);
+        var next = parseInt(netflixSlider.value);
+        if(gameUsage + idlleUsage + next + googleUsage > 24) {
+            next = next - (gameUsage + idlleUsage + next + googleUsage  - 24)
+            netflixSlider.value = next;
+        }
+        netflixUsage = next;
         refreshInterface();
     }
     twitchSlider.oninput = () => {
-        idlleUsage = parseInt(twitchSlider.value);
+        var next = parseInt(twitchSlider.value);
+        if(gameUsage + next + netflixUsage + googleUsage > 24) {
+            next = next - (gameUsage + next + netflixUsage + googleUsage  - 24)
+            twitchSlider.value = next;
+        }
+        idlleUsage = next
         refreshInterface();
     }
     googleSlider.oninput = () => {
+        var next = parseInt(googleSlider.value);
+        if(gameUsage + idlleUsage + netflixUsage + next > 24) {
+            next = next - (gameUsage + idlleUsage + netflixUsage + next  - 24)
+            googleSlider.value = next;
+        }
         googleUsage = parseInt(googleSlider.value);
         refreshInterface();
     }
     pcSlider.oninput = () => {
         // console.log("input");
+        var next = parseInt(pcSlider.value);
+        if(next==0) {
+            gameUsage = 0
+            idlleUsage = 0
+            netflixUsage = 0
+            googleUsage = 0
+        } else if (pcUsage!=0){
+            gameUsage = gameUsage*next/pcUsage
+            idlleUsage = idlleUsage*next/pcUsage
+            netflixUsage = netflixUsage*next/pcUsage
+            googleUsage = googleUsage*next/pcUsage
+        } else {
+            gameUsage = next
+            idlleUsage = 0
+            netflixUsage = 0
+            googleUsage = 0
+        }
+        
+        googleSlider.value = googleUsage
+        twitchSlider.value = idlleUsage
+        netflixSlider.value = netflixUsage
+        gameSlider.value = gameUsage
+        refreshInterface();
     }
     isLaptopSlider.oninput = () => {
         isLaptop = isLaptopSlider.checked;
