@@ -193,7 +193,7 @@ window.onload = () => {
         });
 
 
-    svg.attr("transform", "translate(" + width /2+ "," + height /1.7 + ")");
+    svg.attr("transform", "translate(" + (width /2 + 30)  + "," + height /1.7 + ")");
 
     var refreshPie = function (data, colors) {
 
@@ -278,11 +278,11 @@ window.onload = () => {
     var y = d3.scaleLinear()
         .range([height_bars , 0]);
 
-    var color = d3.scaleOrdinal(["#004c6d", "#4c7c9b", "#86b0cc", "#c1e7ff"]).domain(subgroups);
+    var color = d3.scaleOrdinal(["#004c6d", "#4c7c9b", "#86b0cc", "#c1e7ff"].reverse()).domain(subgroups);
 
     //stack the data? --> stack per subgroup
     var stack = d3.stack()
-        .keys(subgroups)
+        .keys(subgroups.reverse())
         .order(d3.stackOrderNone)
         .offset(d3.stackOffsetNone);
     var stackedData = stack(dataset)
