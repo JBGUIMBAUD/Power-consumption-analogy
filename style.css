@@ -259,3 +259,12 @@ footer {
 .main_title {
   text-align: center;
 }
+
+footer a {
+  display: block;
+  padding-top: 1em;
+}
+
+footer a:first-child {
+  padding-top: 0em;
+}
