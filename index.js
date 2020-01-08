@@ -63,7 +63,7 @@ function compute_watt_energy(wattsConsumption, pc_detailed_duration) {
     return dict
 }
 
-var gameUsage = 2, idlleUsage = 12, netflixUsage = 5, googleUsage = 2, isLaptop = 0;
+var gameUsage = 0.6, idlleUsage = 0.4, netflixUsage = 0.57, googleUsage = 1.49, isLaptop = 0;
 var pcUsage = 0;
 
 var googleSlider, twitchSlider, netflixSlider, gameSlider, pcSlider, isLaptopSlider;
@@ -77,16 +77,16 @@ var pcDetails = {
 
 // laptop
 var watts_consumption_laptop = {
-    "Repos": 32.5,
-    "Google": 34.5,
+    "Repos": 31.5,
+    "Google": 40.5,
     "Netflix": 40.5,
     "Jeux": 109
 }
 var watts_consumption_desktop = {
-    "Repos": 132.5,
-    "Google": 150.5,
-    "Netflix": 190.5,
-    "Jeux": 300
+    "Repos": 137.5,
+    "Google": 154.5,
+    "Netflix": 159.5,
+    "Jeux": 358
 }
 var wattsConsumption = watts_consumption_desktop;
 
