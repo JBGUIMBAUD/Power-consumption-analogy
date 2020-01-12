@@ -210,7 +210,7 @@ window.onload = () => {
     }
     isLaptopSlider.oninput = () => {
         isLaptop = isLaptopSlider.checked;
-        console.log(isLaptop)
+        // console.log(isLaptop)
         if (isLaptop) {
             wattsConsumption = watts_consumption_laptop
         } else {
@@ -423,17 +423,29 @@ window.onload = () => {
     //     .append("text")
     //     .attr("class", "label")
     
-    
     refreshChart = function (dataset) {
         
 
-        y.domain([0, d3.max(stack(dataset), function (d) {
-            array = []
-            array.push(d3.max(d, function (d) {
+        // y.domain([0, d3.max(stack(dataset), function (d) {
+        //     array = []
+        //     array.push(d3.max(d, function (d) {
+        //         return d.data.Repos + d.data.Google + d.data.Netflix + d.data.Jeux
+        //     }))
+        //     return array
+        // })]);
+        var max = d3.max(stack(dataset), function (d) {
+            // array = []
+            // array.push()
+            // console.log(array);
+            return d3.max(d, function (d) {
                 return d.data.Repos + d.data.Google + d.data.Netflix + d.data.Jeux
-            }))
-            return array
-        })]);
+            })
+        })
+        if(max < 20) max = 20;
+
+        // console.log(max);
+        y.domain([0,max]);
+        
         yAxis.scale(y);
 
         svg_bars.selectAll(".bar").data(stack(dataset))
