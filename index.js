@@ -424,7 +424,7 @@ window.onload = () => {
     //     .attr("class", "label")
     
     refreshChart = function (dataset) {
-        
+        var ymax = 15;
 
         // y.domain([0, d3.max(stack(dataset), function (d) {
         //     array = []
@@ -441,11 +441,11 @@ window.onload = () => {
                 return d.data.Repos + d.data.Google + d.data.Netflix + d.data.Jeux
             })
         })
-        if(max < 20) max = 20;
+        if(max < ymax) max = ymax;
 
         // console.log(max);
         y.domain([0,max]);
-        
+
         yAxis.scale(y);
 
         svg_bars.selectAll(".bar").data(stack(dataset))
