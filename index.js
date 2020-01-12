@@ -63,7 +63,7 @@ function compute_watt_energy(wattsConsumption, pc_detailed_duration) {
     return dict
 }
 
-var gameUsage = 2, idlleUsage = 12, netflixUsage = 5, googleUsage = 2, isLaptop = 0;
+var gameUsage = 0.6, idlleUsage = 0.4, netflixUsage = 0.57, googleUsage = 1.49, isLaptop = 0;
 var pcUsage = 0;
 
 var googleSlider, twitchSlider, netflixSlider, gameSlider, pcSlider, isLaptopSlider;
@@ -77,21 +77,21 @@ var pcDetails = {
 
 // laptop
 var watts_consumption_laptop = {
-    "Repos": 32.5,
-    "Google": 34.5,
+    "Repos": 31.5,
+    "Google": 40.5,
     "Netflix": 40.5,
     "Jeux": 109
 }
 var watts_consumption_desktop = {
-    "Repos": 132.5,
-    "Google": 150.5,
-    "Netflix": 190.5,
-    "Jeux": 300
+    "Repos": 137.5,
+    "Google": 154.5,
+    "Netflix": 159.5,
+    "Jeux": 358
 }
 var wattsConsumption = watts_consumption_desktop;
 
 var pcColors = d3.scaleOrdinal()
-    .domain(["Repos","Google", "Netflix", "Jeux"])
+    .domain(["Repos","Google", "Netflix", "Jeux"].reverse())
     .range(["#004c6d", "#4c7c9b", "#86b0cc", "#c1e7ff"]);
 
 
@@ -145,23 +145,66 @@ window.onload = () => {
     // isLaptopSlider.value = isLaptop;
 
     gameSlider.oninput = () => {
-        gameUsage = parseInt(gameSlider.value);
+        var next = parseInt(gameSlider.value);
+        if(next + idlleUsage + netflixUsage + googleUsage > 24) {
+            next = next - (next + idlleUsage + netflixUsage + googleUsage  - 24)
+            gameSlider.value = next;
+        }
+        gameUsage = next;
         refreshInterface();
     }
     netflixSlider.oninput = () => {
-        netflixUsage = parseInt(netflixSlider.value);
+        var next = parseInt(netflixSlider.value);
+        if(gameUsage + idlleUsage + next + googleUsage > 24) {
+            next = next - (gameUsage + idlleUsage + next + googleUsage  - 24)
+            netflixSlider.value = next;
+        }
+        netflixUsage = next;
         refreshInterface();
     }
     twitchSlider.oninput = () => {
-        idlleUsage = parseInt(twitchSlider.value);
+        var next = parseInt(twitchSlider.value);
+        if(gameUsage + next + netflixUsage + googleUsage > 24) {
+            next = next - (gameUsage + next + netflixUsage + googleUsage  - 24)
+            twitchSlider.value = next;
+        }
+        idlleUsage = next
         refreshInterface();
     }
     googleSlider.oninput = () => {
+        var next = parseInt(googleSlider.value);
+        if(gameUsage + idlleUsage + netflixUsage + next > 24) {
+            next = next - (gameUsage + idlleUsage + netflixUsage + next  - 24)
+            googleSlider.value = next;
+        }
         googleUsage = parseInt(googleSlider.value);
         refreshInterface();
     }
     pcSlider.oninput = () => {
         // console.log("input");
+        var next = parseInt(pcSlider.value);
+        if(next==0) {
+            gameUsage = 0
+            idlleUsage = 0
+            netflixUsage = 0
+            googleUsage = 0
+        } else if (pcUsage!=0){
+            gameUsage = gameUsage*next/pcUsage
+            idlleUsage = idlleUsage*next/pcUsage
+            netflixUsage = netflixUsage*next/pcUsage
+            googleUsage = googleUsage*next/pcUsage
+        } else {
+            gameUsage = next
+            idlleUsage = 0
+            netflixUsage = 0
+            googleUsage = 0
+        }
+        
+        googleSlider.value = googleUsage
+        twitchSlider.value = idlleUsage
+        netflixSlider.value = netflixUsage
+        gameSlider.value = gameUsage
+        refreshInterface();
     }
     isLaptopSlider.oninput = () => {
         isLaptop = isLaptopSlider.checked;
@@ -193,7 +236,7 @@ window.onload = () => {
         });
 
 
-    svg.attr("transform", "translate(" + width /2+ "," + height /1.7 + ")");
+    svg.attr("transform", "translate(" + (width /2 + 30)  + "," + height /1.7 + ")");
 
     var refreshPie = function (data, colors) {
 
@@ -278,11 +321,11 @@ window.onload = () => {
     var y = d3.scaleLinear()
         .range([height_bars , 0]);
 
-    var color = d3.scaleOrdinal(["#004c6d", "#4c7c9b", "#86b0cc", "#c1e7ff"]).domain(subgroups);
+    var color = d3.scaleOrdinal(["#004c6d", "#4c7c9b", "#86b0cc", "#c1e7ff"].reverse()).domain(subgroups);
 
     //stack the data? --> stack per subgroup
     var stack = d3.stack()
-        .keys(subgroups)
+        .keys(subgroups.reverse())
         .order(d3.stackOrderNone)
         .offset(d3.stackOffsetNone);
     var stackedData = stack(dataset)
