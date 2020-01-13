@@ -283,7 +283,7 @@ window.onload = () => {
 				return (d.enabled) ? d.x : 0;                                      
 				}));
 				tooltippie.select('.label').html(d.data.label);            
-				tooltippie.select('.x').html(d.value + ' h');         
+				tooltippie.select('.x').html(d3.format(".2f")(d.value) + ' h');         
 				tooltippie.style('display', 'block');
             })
             .on('mouseout', function (d, i) {
@@ -292,7 +292,6 @@ window.onload = () => {
             .on('mousemove', function(d) {                 
 				tooltippie.style('top', (d3.event.layerY + 10) + 'px') 
 				.style('left', (d3.event.layerX + 10) + 'px');
-				
 			})
         /* slice		
             .transition().duration(1000)
@@ -422,7 +421,7 @@ window.onload = () => {
                 var xPosition = d3.mouse(this)[0]+10;
                 var yPosition = d3.mouse(this)[1]+10;
                 tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-                tooltip.select("text").text(d3.format(".1f")(d[1]-d[0]));
+                tooltip.select("text").text(d3.format(".2f")(d[1]-d[0]));
             });
 
     var legend = svg_bars.append("g")
