@@ -6,6 +6,10 @@ We propose to highlight theres costs with familiar concepts for non expert peopl
 This project is realise within the scope of the Data Vizualisation course of Lyon 1 University M2 IA :
 https://lyondataviz.github.io/teaching/lyon1-m2/2019/
 
+![Global View](readme_glview.png)
+
+![Charts View](readme_chview.png)
+
 ## Project pages :
 https://github.com/JBGUIMBAUD/pc_energy_cost
 
