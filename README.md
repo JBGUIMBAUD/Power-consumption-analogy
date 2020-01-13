@@ -7,6 +7,7 @@ This project is realise within the scope of the Data Vizualisation course of Lyo
 https://lyondataviz.github.io/teaching/lyon1-m2/2019/
 
 ![Global View](readme_glview.png)
+<img src="readme_glview.png" alt="Global View" width="200" height="auto" />
 
 ![Charts View](readme_chview.png)
 
