@@ -224,6 +224,9 @@ window.onload = () => {
         .attr("class", "labels");
     svg.append("g")
         .attr("class", "lines");
+        
+    var arc = d3.arc()
+		.innerRadius(0);
 
     var width = 200,
         height = 100,
@@ -234,7 +237,20 @@ window.onload = () => {
         .value(function (d) {
             return d.value;
         });
+        
+        
+    var tooltippie = d3.select('#visu') 
+		.append('div')                                 
+		.attr('class', 'tooltippie');
 
+	tooltippie.append('div')
+		.attr('class', 'label');
+	
+	tooltippie.append('div')                     
+		.attr('class', 'x');
+		
+	tooltippie.append('div')  
+		.attr('class', 'percent');
 
     svg.attr("transform", "translate(" + (width /2 + 30)  + "," + height /1.7 + ")");
 
@@ -245,7 +261,7 @@ window.onload = () => {
         slice.enter()
             .append("path")
             .attr('d', d3.arc()
-                .innerRadius(radius * 0.8)
+                .innerRadius(0)
                 .outerRadius(radius)
             )
             .attr('fill', function (d) { return (colors(d.data.label)) })
@@ -253,15 +269,21 @@ window.onload = () => {
             .style("stroke-width", "2px")
             .style("opacity", 1)
             .on('mouseover', function (d, i) {
-                d3.select(this).transition()
-                     .duration('50')
-                     .attr('opacity', '.85')
+				var total = d3.sum(data.map(function(d) {       
+				return (d.enabled) ? d.x : 0;                                      
+				}));
+				tooltippie.select('.label').html(d.data.label);            
+				tooltippie.select('.x').html(d.value + ' h');         
+				tooltippie.style('display', 'block');
             })
             .on('mouseout', function (d, i) {
-                d3.select(this).transition()
-                     .duration('50')
-                     .attr('opacity', '1');
+                tooltippie.style('display', 'none');
             })
+            .on('mousemove', function(d) {                 
+				tooltippie.style('top', (d3.event.layerY + 10) + 'px') 
+				.style('left', (d3.event.layerX + 10) + 'px');
+				
+			})
         /* slice		
             .transition().duration(1000)
             .attrTween("d", function(d) {
