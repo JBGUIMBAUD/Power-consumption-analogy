@@ -209,7 +209,7 @@ input:checked + .toggle_slider:before {
 }
 .mini_pie { 
   grid-column: 1 / 3;
-  grid-row: 0;
+  grid-row: 1;
 }
 
 .tooltippie {
@@ -280,6 +280,10 @@ footer {
   text-align: center;
 }
 
+.main_title:first-child {
+  font-size: 3em;
+}
+
 .switch_wrapper{
   float:left; 
 }
@@ -292,4 +296,22 @@ footer a {
 
 footer a:first-child {
   padding-top: 0em;
+}
+
+footer p a{
+  display: inline-block;
+}
+
+footer p a:link {
+  text-decoration: none;
+}
+
+footer p a:visited {
+  text-decoration: none;
+}
+
+a img {
+  width: 5em;
+  height: auto;
+  border-radius: 0.8em;
 }
