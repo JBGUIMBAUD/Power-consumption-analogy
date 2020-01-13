@@ -3,11 +3,11 @@ Our goal is to raise awareness among general public about the energetic cost ind
 
 We propose to highlight theres costs with familiar concepts for non expert peoples with concrete scales (ex: physical efforts, hamburgers numbers express in calorie, ...).
 
+<img src="readme_glview.png" alt="Global View" width="50%" height="auto"/> 
+<img src="readme_chview.png" alt="Charts View" width="70%" height="auto"/>
+
 This project is realise within the scope of the Data Vizualisation course of Lyon 1 University M2 IA :
 https://lyondataviz.github.io/teaching/lyon1-m2/2019/
-
-<img src="readme_glview.png" alt="Global View" width="50%" height="auto"/> 
-<img src="readme_chview.png" alt="Charts View" width="49%" height="auto"/>
 
 ## Project pages :
 https://github.com/JBGUIMBAUD/pc_energy_cost
@@ -35,6 +35,9 @@ https://github.com/JBGUIMBAUD/pc_energy_cost/wiki/Document-de-cadrage
 Notre but est de sensibiliser le grand publique au coût énergétique induit par sa propre utilisation de l'ordinateur.
 
 Nous proposons de mettre ces coûts en évidence en les traduisant en divers concepts familiers à une personne non experte (ex : effort physique, nombre de hamburgers en terme de calories, etc), par le biai d'utilisation de "concrete scales".
+
+<img src="readme_glview.png" alt="Global View" width="50%" height="auto"/> 
+<img src="readme_chview.png" alt="Charts View" width="70%" height="auto"/>
 
 Ce projet est réalisé dans le cadre du cours de Data Vizualisation du M2 IA de l'université Lyon 1 :
 https://lyondataviz.github.io/teaching/lyon1-m2/2019/
