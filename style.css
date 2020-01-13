@@ -131,8 +131,8 @@
   /* Sliders */
    /* The switch - the box around the slider */
 .switch {
-  position: relative;
-  display: inline-block;
+  position: absolute;
+  left: 150px;
   width: 60px;
   height: 34px;
 }
@@ -200,6 +200,7 @@ input:checked + .toggle_slider:before {
   grid-template-rows: 100px;
 }
 .slider_menu {
+  width: 400px;
   grid-column: 1;
   grid-row: 3 / 6;
 }
@@ -280,12 +281,11 @@ footer {
   text-align: center;
 }
 
-.main_title:first-child {
-  font-size: 3em;
-}
-
 .switch_wrapper{
-  float:left; 
+  width: 300px;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
 }
 
 .inline { float:left; }
@@ -314,4 +314,10 @@ a img {
   width: 5em;
   height: auto;
   border-radius: 0.8em;
+}
+
+.slider_subg {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
 }

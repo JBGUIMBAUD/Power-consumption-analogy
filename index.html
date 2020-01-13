@@ -7,7 +7,6 @@
         <title>Computer Energy Costs</title>
     </head>
     <body>
-        <h1 class="main_title">Computer Energy Costs</h1>
         <h1 class="main_title">La consommation de votre ordinateur</h1>
         <h1 class="main_title">vue d'une autre manière</h1>
         <p>
@@ -25,44 +24,57 @@
             <section class="slider_menu">
                 <div class="slider_group">
                     <!-- Rectangular switch -->
-                    <label>PC portable ?</label>
-                    <label class="switch">
-                        <input type="checkbox" id="isLaptop">
-                        <span class="toggle_slider"></span>
-                    </label>
-                    <br>
+                    <div class="switch_wrapper">
+                        <label>PC portable ?</label>
+                        <label class="switch">
+                            <input type="checkbox" id="isLaptop">
+                            <span class="toggle_slider round"></span>
+                        </label>
+                    </div>
                     <label>Utilisation du PC (en h/jour)</label>
-                    <div class="range">
-                        <input type="range" min="0" max="24" class="slider" id="pc">
+                    <div class="slider_subg">
+                        <div class="range">
+                            <input type="range" min="0" max="24" class="slider" id="pc" step="0.1">
+                        </div>
+                        <p class="slider_value"><span id="pc_value"></span></p>
                     </div>
                 </div>
                 <div class="details">
                     <h3>Détails</h3>
                     <div class="slider_group">
-                            <label>Repos</label>
-                        <div class="range">
-                            <input type="range" min="0" max="24" class="slider"id="twitch">
+                        <label>Repos</label>
+                        <div class="slider_subg">
+                            <div class="range">
+                                <input type="range" min="0" max="24" class="slider"id="twitch" step="0.1">
+                            </div>
+                            <p class="slider_value"><span id="idlle_value"></span></p>
                         </div>
-    
                     </div>
                     <div class="slider_group">
                         <label>Google</label>
-                        <div class="range">
-                            <input type="range" min="0" max="24" class="slider" id="google">
+                        <div class="slider_subg">
+                            <div class="range">
+                                <input type="range" min="0" max="24" class="slider" id="google" step="0.1">
+                            </div>
+                            <p class="slider_value"><span id="google_value"></span></p>
                         </div>
                     </div>
                     <div class="slider_group">
-        
                         <label>Netflix</label>
-                        <div class="range">
-                            <input type="range" min="0" max="24" class="slider" id="netflix">
+                        <div class="slider_subg">
+                            <div class="range">
+                                <input type="range" min="0" max="24" class="slider" id="netflix" step="0.1">
+                            </div>
+                            <p class="slider_value"><span id="netflix_value"></span></p>
                         </div>
-                    </div> 
+                    </div>
                     <div class="slider_group">
-        
                         <label>Jeux</label>
-                        <div class="range">
-                            <input type="range" min="0" max="24" class="slider" id="jeux">
+                        <div class=slider_subg>
+                            <div class="range">
+                                <input type="range" min="0" max="24" class="slider" id="jeux" step="0.1">
+                            </div>
+                            <p class="slider_value"><span id="game_value"></span></p>
                         </div>
                     </div> 
                 </div>

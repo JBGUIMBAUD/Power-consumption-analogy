@@ -146,6 +146,13 @@ window.onload = () => {
     gameSlider.value = gameUsage;
     // isLaptopSlider.value = isLaptop;
 
+    // sliders values
+    var pc_val = document.getElementById("pc_value");
+    var idlle_val = document.getElementById("idlle_value");
+    var google_val = document.getElementById("google_value");
+    var netflix_val = document.getElementById("netflix_value");
+    var game_val = document.getElementById("game_value");
+
     gameSlider.oninput = () => {
         var next = parseInt(gameSlider.value);
         if(next + idlleUsage + netflixUsage + googleUsage > 24) {
@@ -206,6 +213,7 @@ window.onload = () => {
         twitchSlider.value = idlleUsage
         netflixSlider.value = netflixUsage
         gameSlider.value = gameUsage
+        pc_val.innerHTML = pcSlider.value;
         refreshInterface();
     }
     isLaptopSlider.oninput = () => {
@@ -446,7 +454,7 @@ window.onload = () => {
     //     .attr("class", "label")
     
     refreshChart = function (dataset) {
-        var ymax = 15;
+        var ymax = 2;
 
         // y.domain([0, d3.max(stack(dataset), function (d) {
         //     array = []
@@ -500,6 +508,13 @@ window.onload = () => {
         //TODO: check validitiy (SUM <= 24h)
         pcUsage = newPcUsage;
         pcSlider.value = pcUsage;
+
+        pc_val.innerHTML = pcSlider.value;
+        idlle_val.innerHTML = twitchSlider.value;
+        google_val.innerHTML = googleSlider.value;
+        netflix_val.innerHTML = netflixSlider.value;
+        game_val.innerHTML = gameSlider.value;
+
         pcDetails = {
             "Google": googleUsage,
             "Repos": idlleUsage,
