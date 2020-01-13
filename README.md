@@ -1,3 +1,33 @@
+# Project : pc_energy_cost :
+Our goal is to raise awareness among general public about the energetic cost induced by our own computer usages.
+
+We propose to highlight theres costs with familiar concepts for non expert peoples with concrete scales (ex: physical efforts, hamburgers numbers express in calorie, ...).
+
+This project is realise within the scope of the Data Vizualisation course of Lyon 1 University M2 IA :
+https://lyondataviz.github.io/teaching/lyon1-m2/2019/
+
+## Project pages :
+https://github.com/JBGUIMBAUD/pc_energy_cost
+
+## Schedule :
+https://github.com/JBGUIMBAUD/pc_energy_cost/wiki/Planning
+
+## Guidance document :
+https://github.com/JBGUIMBAUD/pc_energy_cost/wiki/Document-de-cadrage
+
+## Students :
+* Jean-Baptiste Guimbaud 11408925
+* Nicolas Condomitti 11708681
+* Théo Buttez 11506528
+* Jérémy Duval 11501022
+
+## Teachers :
+* Aurélien Tabard
+* Romain Vuillemot
+
+
+=====================================================================================================================================================
+
 # Projet : pc_energy_cost :
 Notre but est de sensibiliser le grand publique au coût énergétique induit par sa propre utilisation de l'ordinateur.
 
