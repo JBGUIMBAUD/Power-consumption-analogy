@@ -298,4 +298,5 @@ footer p a:visited {
 a img {
   width: 5em;
   height: auto;
+  border-radius: 0.8em;
 }
