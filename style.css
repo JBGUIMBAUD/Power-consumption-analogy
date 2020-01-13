@@ -265,6 +265,10 @@ footer {
   text-align: center;
 }
 
+.main_title:first-child {
+  font-size: 3em;
+}
+
 .switch_wrapper{
   float:left; 
 }
