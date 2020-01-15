@@ -191,6 +191,7 @@ window.onload = () => {
     }
     pcSlider.oninput = () => {
         // console.log("input");
+        console.log(x.bandwidth())
         var next = parseInt(pcSlider.value);
         if(next==0) {
             gameUsage = 0
@@ -314,12 +315,8 @@ window.onload = () => {
     var margin_bars = { top: 40, right: 30, bottom: 30, left: 50 },
         width_bars = 700 - margin_bars.left - margin_bars.right,
         height_bars = 600;
-
-    var greyColor = "#898989";
-    var barColor = d3.interpolateInferno(0.4);
-    var highlightColor = d3.interpolateInferno(0.3);
-
-    var formatPercent = d3.format(".0%");
+    var padding_big_macs = 40;
+    
 
     var svg_bars = d3.select("body").select("#bar_chart").append("svg")
         .attr("width", width_bars + margin_bars.left + margin_bars.right)
@@ -349,6 +346,9 @@ window.onload = () => {
     var x = d3.scaleBand()
         .range([0, width_bars])
         .padding(0.4);
+    var x_bm = d3.scaleBand()
+    .range([0, padding_big_macs])
+    .padding(0.4);
     var y = d3.scaleLinear()
         .range([height_bars , 0]);
 
@@ -359,14 +359,25 @@ window.onload = () => {
         .keys(subgroups.reverse())
         .order(d3.stackOrderNone)
         .offset(d3.stackOffsetNone);
-    var stackedData = stack(dataset)
+    console.log(dataset)
+    var sport_data = dataset.slice(0,5)
+    var big_macs_data = dataset.slice(5,6)
+    console.log(sport_data)
+    console.log(big_macs_data)
+    var stackedData = stack(sport_data)
+    var stackedBigMacs = stack(big_macs_data)
+    console.log(stackedData)
+    console.log(stackedBigMacs)
 
     var xAxis = d3.axisBottom(x).tickSize([]).tickPadding(10);
+    var xAxis_bm = d3.axisBottom(x_bm).tickSize([]).tickPadding(10);
     var yAxis = d3.axisLeft(y);
     // var yAxis = d3.axisLeft(y).tickFormat(formatPercent);
 
-    labels = ["time walking(h.)", "time running (h.)", "time cycling (h.)", "time swimming (h.)", "Big Macs"]
+    labels = ["utilisation du pc (h.)","marche (h.)", "course (h.)", "vélo (h.)", "nage (h.)", ""]
     x.domain(labels);
+    x_bm.domain('Big Macs')
+
     // y.domain([0, d3.max(dataset, d => { return d.value; })]);
     // console.log(pcUsage)
     y.domain([0, d3.max(stackedData, function(d) {
@@ -380,9 +391,13 @@ window.onload = () => {
     })]);
 
     svg_bars.append("g")
-        .attr("class", "x axis")
+        .attr("class", "xaxis")
         .attr("transform", "translate(0," + height_bars + ")")
         .call(xAxis);
+    svg_bars.append("g")
+        .attr("class", "xaxis")
+        .attr("transform", "translate("+ (x("") + padding_big_macs + 10) +"," + height_bars + ")")
+        .call(xAxis_bm);
     svg_bars.append("g")
         .attr("class", "yaxis")
         .call(yAxis);
@@ -402,8 +417,11 @@ window.onload = () => {
                     return x(d.data.label); 
                 })
                 .attr("y", function(d) { return y(d[1]); })
-                .attr("height", function(d) { return y(d[0]) - y(d[1]); })
-                .attr("width",x.bandwidth())
+                .attr("height", function(d) {
+                    console.log(y(d[0]) - y(d[1])); 
+                    return y(d[0]) - y(d[1]); 
+                })
+                .attr("width", x.bandwidth())
             .on("mouseover", function() {
                 tooltip.style("display", null);
                 d3.select(this).transition()
@@ -423,6 +441,56 @@ window.onload = () => {
                 tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
                 tooltip.select("text").text(d3.format(".2f")(d[1]-d[0]));
             });
+    
+    // Bigs macs
+    big_macs = svg_bars.selectAll(".bar_bm").data(stackedBigMacs)
+        .enter().append("g")
+        .attr("fill", function(d) {
+            // console.log(d.key)
+            return color(d.key); 
+        })
+        .attr("class", "bar_bm")
+        .selectAll("rect")
+        .data(function(d) {return d; })
+            .enter().append("rect")
+                .attr("x", function(d) {
+                    // console.log("d",d.data.label)
+                    return x(""); 
+                })
+                .attr("y", function(d) { return y(d[1]); })
+                .attr("height", function(d) {
+                    return y(d[0]) - y(d[1]);
+                })
+                .attr("width", x.bandwidth())
+                .attr("transform", function(d, i) { return "translate(" +padding_big_macs+ ",0)"; })
+            .on("mouseover", function() {
+                tooltip.style("display", null);
+                d3.select(this).transition()
+                    .duration('50')
+                    .attr('opacity', '.8')
+            })
+            .on("mouseout", function() {
+                tooltip.style("display", "none");
+                d3.select(this).transition()
+                    .duration('50')
+                    .attr('opacity', '1')
+            })
+            .on("mousemove", function(d) {
+                // console.log(d);
+                var xPosition = d3.mouse(this)[0]+10;
+                var yPosition = d3.mouse(this)[1]+10;
+                tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+                tooltip.select("text").text(d3.format(".2f")(d[1]-d[0]));
+            });
+    
+    // big mac stroke separator
+    svg_bars.append("line")//making a line for legend
+        .attr("x1", x(""))
+        .attr("x2", x(""))
+        .attr("y1", height_bars)
+        .attr("y2", height_bars - 200)
+        .style("stroke-dasharray","5,5")//dashed array for line
+        .style("stroke", "white");
 
     var legend = svg_bars.append("g")
         .attr("font-family", "sans-serif")
@@ -453,6 +521,12 @@ window.onload = () => {
     //     .attr("class", "label")
     
     refreshChart = function (dataset) {
+        console.log(dataset)
+        sport_data = dataset.slice(0,5)
+        big_macs_data = dataset.slice(5,6)
+        stackedData = stack(sport_data)
+        stackedBigMacs = stack(big_macs_data)
+
         var ymax = 2;
 
         // y.domain([0, d3.max(stack(dataset), function (d) {
@@ -477,7 +551,14 @@ window.onload = () => {
 
         yAxis.scale(y);
 
-        svg_bars.selectAll(".bar").data(stack(dataset))
+        svg_bars.selectAll(".bar").data(stackedData)
+            .selectAll("rect")
+            .data(function (d) { return d; }).transition().duration(transition_bar_time)
+            .attr("y", function (d) { return y(d[1]); })
+            .attr("height", function (d) { return y(d[0]) - y(d[1]); })
+
+        
+        svg_bars.selectAll(".bar_bm").data(stackedBigMacs)
             .selectAll("rect")
             .data(function (d) { return d; }).transition().duration(transition_bar_time)
             .attr("y", function (d) { return y(d[1]); })
@@ -540,8 +621,11 @@ window.onload = () => {
         // swim = joulesToSwim(tot_energy)
         // burger = joulesToBigMac(tot_energy)
 
-        labels = ["time walking(h.)", "time running (h.)", "time cycling (h.)", "time swimming (h.)", "Big Macs"]
+        labels = ["marche (h.)", "course (h.)", "vélo (h.)", "nage (h.)", "Big Macs"]
         data = []
+        // add total hours
+        data.push({"label": "utilisation du pc (h.)", "Repos": pcDetails.Repos,"Google": pcDetails.Google, "Netflix": pcDetails.Netflix, "Jeux": pcDetails.Jeux})
+
         watt_energies = compute_watt_energy(wattsConsumption, pcDetails)
         // console.log("energies", watt_energies)
         for (i in labels) {
@@ -567,17 +651,14 @@ window.onload = () => {
 
     function compute_energy_joules(energy, label) {
         switch (label) {
-            case "time walking(h.)":
+            case "marche (h.)":
                 return joulesToWalk(energy)
-                break;
-            case "time running (h.)":
+            case "course (h.)":
                 return joulesToRun(energy)
-            case "time cycling (h.)":
+            case "vélo (h.)":
                 return joulesToCycle(energy)
-                break;
-            case "time swimming (h.)":
+            case "nage (h.)":
                 return joulesToSwim(energy)
-                break;
             case "Big Macs":
                 return joulesToBigMac(energy)
             default:
