@@ -343,7 +343,7 @@ window.onload = () => {
     var xAxis_bm = d3.axisBottom(x_bm).tickSize([]).tickPadding(10);
     var yAxis = d3.axisLeft(y);
 
-    labels = ["utilisation du pc (h.)","marche (h.)", "course (h.)", "vélo (h.)", "nage (h.)", ""]
+    labels = ["utilisation du pc (h.)","marche (h.)", "vélo (h.)", "course (h.)", "nage (h.)", ""]
     x.domain(labels);
     x_bm.domain('Big Macs')
 
@@ -552,7 +552,7 @@ window.onload = () => {
 
     
     function update_energy_data() {
-        labels = ["marche (h.)", "course (h.)", "vélo (h.)", "nage (h.)", "Big Macs"]
+        labels = ["marche (h.)", "vélo (h.)","course (h.)", "nage (h.)", "Big Macs"]
         data = []
         // add total hours
         data.push({"label": "utilisation du pc (h.)", "Repos": pcDetails.Repos,"Google": pcDetails.Google, "Netflix": pcDetails.Netflix, "Jeux": pcDetails.Jeux})
