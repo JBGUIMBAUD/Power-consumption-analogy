@@ -1,13 +1,6 @@
-
-function wattToDailyJoules(w, durationInHours) {
-    res = durationInHours * 3600 * w;
-    // console.log("Total energy(J: ", res)
-    return res
-}
-
-function wattToJoules(w_enery) {
+function wattToJoules(watt_per_hour) {
     // 1 J = 1 W/s.
-    res = w_enery * 3600
+    res = watt_per_hour * 3600
     // console.log("Equivalent in Joules", res)
     return res
 }
@@ -46,20 +39,12 @@ function joulesToBigMac(energy) {
     return res
 }
 
-function compute_total_Watt_enery(wattsConsumption, pcDetails) {
-    energy_total = 0
-    Object.keys(pcDetails).forEach(function (key) {
-        energy_total += pcDetails[key] * wattsConsumption[key]
-    });
-    return energy_total
-}
-
 function compute_watt_energy(wattsConsumption, pc_detailed_duration) {
+    // compute energy in watt/h
     dict = {}
     for (key in pc_detailed_duration) {
         dict[key] = pc_detailed_duration[key] * wattsConsumption[key]
     }
-    // console.log(dict)
     return dict
 }
 
@@ -82,6 +67,7 @@ var watts_consumption_laptop = {
     "Netflix": 40.5,
     "Jeux": 109
 }
+// desktop pc
 var watts_consumption_desktop = {
     "Repos": 137.5,
     "Google": 154.5,
@@ -144,7 +130,6 @@ window.onload = () => {
     twitchSlider.value = idlleUsage;
     netflixSlider.value = netflixUsage;
     gameSlider.value = gameUsage;
-    // isLaptopSlider.value = isLaptop;
 
     // sliders values
     var pc_val = document.getElementById("pc_value");
@@ -294,16 +279,6 @@ window.onload = () => {
 				tooltippie.style('top', (d3.event.layerY + 10) + 'px') 
 				.style('left', (d3.event.layerX + 10) + 'px');
 			})
-        /* slice		
-            .transition().duration(1000)
-            .attrTween("d", function(d) {
-                this._current = this._current || d;
-                var interpolate = d3.interpolate(this._current, d);
-                this._current = interpolate(0);
-                return function(t) {
-                    return arc(interpolate(t));
-                };
-            })*/
         slice.exit()
             .remove();
     }
@@ -354,25 +329,19 @@ window.onload = () => {
 
     var color = d3.scaleOrdinal(["#004c6d", "#4c7c9b", "#86b0cc", "#c1e7ff"].reverse()).domain(subgroups);
 
-    //stack the data? --> stack per subgroup
     var stack = d3.stack()
         .keys(subgroups.reverse())
         .order(d3.stackOrderNone)
         .offset(d3.stackOffsetNone);
-    console.log(dataset)
+
     var sport_data = dataset.slice(0,5)
     var big_macs_data = dataset.slice(5,6)
-    console.log(sport_data)
-    console.log(big_macs_data)
     var stackedData = stack(sport_data)
     var stackedBigMacs = stack(big_macs_data)
-    console.log(stackedData)
-    console.log(stackedBigMacs)
 
     var xAxis = d3.axisBottom(x).tickSize([]).tickPadding(10);
     var xAxis_bm = d3.axisBottom(x_bm).tickSize([]).tickPadding(10);
     var yAxis = d3.axisLeft(y);
-    // var yAxis = d3.axisLeft(y).tickFormat(formatPercent);
 
     labels = ["utilisation du pc (h.)","marche (h.)", "course (h.)", "vélo (h.)", "nage (h.)", ""]
     x.domain(labels);
@@ -386,7 +355,6 @@ window.onload = () => {
             // console.log(d.data.repos + d.data.google + d.data.netflix + d.data.jeux)
             return d.data.repos + d.data.google + d.data.netflix + d.data.jeux
         }))
-        // console.log(array)
         return array
     })]);
 
@@ -404,10 +372,7 @@ window.onload = () => {
 
     to_update = svg_bars.selectAll(".bar").data(stackedData)
         .enter().append("g")
-        .attr("fill", function(d) {
-            // console.log(d.key)
-            return color(d.key); 
-        })
+        .attr("fill", function(d) {return color(d.key);})
         .attr("class", "bar")
         .selectAll("rect")
         .data(function(d) {return d; })
@@ -417,10 +382,7 @@ window.onload = () => {
                     return x(d.data.label); 
                 })
                 .attr("y", function(d) { return y(d[1]); })
-                .attr("height", function(d) {
-                    console.log(y(d[0]) - y(d[1])); 
-                    return y(d[0]) - y(d[1]); 
-                })
+                .attr("height", function(d) {return y(d[0]) - y(d[1]);})
                 .attr("width", x.bandwidth())
             .on("mouseover", function() {
                 tooltip.style("display", null);
@@ -445,22 +407,14 @@ window.onload = () => {
     // Bigs macs
     big_macs = svg_bars.selectAll(".bar_bm").data(stackedBigMacs)
         .enter().append("g")
-        .attr("fill", function(d) {
-            // console.log(d.key)
-            return color(d.key); 
-        })
+        .attr("fill", function(d) { return color(d.key);})
         .attr("class", "bar_bm")
         .selectAll("rect")
         .data(function(d) {return d; })
             .enter().append("rect")
-                .attr("x", function(d) {
-                    // console.log("d",d.data.label)
-                    return x(""); 
-                })
+                .attr("x", function(d) {return x("");})
                 .attr("y", function(d) { return y(d[1]); })
-                .attr("height", function(d) {
-                    return y(d[0]) - y(d[1]);
-                })
+                .attr("height", function(d) {return y(d[0]) - y(d[1]);})
                 .attr("width", x.bandwidth())
                 .attr("transform", function(d, i) { return "translate(" +padding_big_macs+ ",0)"; })
             .on("mouseover", function() {
@@ -513,21 +467,14 @@ window.onload = () => {
         .attr("dy", "0.32em")
         .style('fill', 'white')
         .text(function(d) { return d; });
-
-    // svg_bars.selectAll(".label")
-    //     .data(dataset)
-    //     .enter()
-    //     .append("text")
-    //     .attr("class", "label")
     
     refreshChart = function (dataset) {
-        console.log(dataset)
         sport_data = dataset.slice(0,5)
         big_macs_data = dataset.slice(5,6)
         stackedData = stack(sport_data)
         stackedBigMacs = stack(big_macs_data)
 
-        var ymax = 2;
+        var ymax = 4;
 
         // y.domain([0, d3.max(stack(dataset), function (d) {
         //     array = []
@@ -537,9 +484,6 @@ window.onload = () => {
         //     return array
         // })]);
         var max = d3.max(stack(dataset), function (d) {
-            // array = []
-            // array.push()
-            // console.log(array);
             return d3.max(d, function (d) {
                 return d.data.Repos + d.data.Google + d.data.Netflix + d.data.Jeux
             })
@@ -601,33 +545,19 @@ window.onload = () => {
             "Netflix": netflixUsage,
             "Jeux": gameUsage
         }
-
-        //TODO refresh D3
-        // console.log(getData(pcDetails, pcColors));
         refreshPie(getData(pcDetails, pcColors), pcColors);
         refreshChart(update_energy_data())
-        // print energies
-        // dataset = update_energy_data()
     }
     refreshInterface();
 
     
     function update_energy_data() {
-        // tot_energy_w = compute_total_Watt_enery(wattsConsumption, pcDetails)
-        // tot_energy = wattToJoules(tot_energy_w)
-        // walk = joulesToWalk(tot_energy)
-        // run = joulesToRun(tot_energy)
-        // cycle = joulesToCycle(tot_energy)
-        // swim = joulesToSwim(tot_energy)
-        // burger = joulesToBigMac(tot_energy)
-
         labels = ["marche (h.)", "course (h.)", "vélo (h.)", "nage (h.)", "Big Macs"]
         data = []
         // add total hours
         data.push({"label": "utilisation du pc (h.)", "Repos": pcDetails.Repos,"Google": pcDetails.Google, "Netflix": pcDetails.Netflix, "Jeux": pcDetails.Jeux})
 
         watt_energies = compute_watt_energy(wattsConsumption, pcDetails)
-        // console.log("energies", watt_energies)
         for (i in labels) {
             label = labels[i]
             iddle = compute_energy_joules(wattToJoules(watt_energies.Repos), label)
@@ -636,16 +566,6 @@ window.onload = () => {
             game = compute_energy_joules(wattToJoules(watt_energies.Jeux), label)
             data.push({"label": label, "Repos": iddle,"Google": google, "Netflix": netflix, "Jeux": game})
         }
-        // console.log(data)
-
-
-        // data = [
-        //     { "label": "time walking(h.)", "value": walk },
-        //     { "label": "time running (h.)", "value": run },
-        //     { "label": "time cycling (h.)", "value": cycle },
-        //     { "label": "time swimming (h.)", "value": swim },
-        //     { "label": "Big Macs", "value": burger }
-        // ]
         return data
     }
 
