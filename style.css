@@ -291,7 +291,7 @@ footer {
 .inline { float:left; }
 footer a {
   display: inline-block;
-  padding-top: 1em;
+  padding-top: 0.5em;
 }
 
 footer a:first-child {
@@ -324,11 +324,15 @@ a img {
 
 .auteurs {
   display: inline-block;
-  font-size: 0.8em;
+  font-size: 0.7em;
 }
 
 .auteurs a {
   top: 25%;
   -ms-transform: translateY(25%);
   transform: translateY(25%);
+}
+
+footer {
+  font-size: 0.8em;
 }
