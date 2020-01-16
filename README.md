@@ -31,7 +31,7 @@ https://github.com/JBGUIMBAUD/pc_energy_cost/wiki/Document-de-cadrage
 =====================================================================================================================================================
 
 # Projet : pc_energy_cost :
-Aujourdh'ui, la question de notre impact energétique est une des questions les plus importante. Cependant, nous ne somme pas familiés avec le fait de prendre en compte notre utilisation d'internet et des ordinateurs. Il est difficile de nous représenter notre consommation électrique, notamment par le fait qu'il est compliqué de se représenter les Watt/Heure.
+Aujourd'hui, la question de notre impact energétique est une des questions les plus importante. Cependant, nous ne somme pas familiés avec le fait de prendre en compte notre utilisation d'internet et des ordinateurs. Il est difficile de nous représenter notre consommation électrique, notamment par le fait qu'il est compliqué de se représenter les Watt/Heure.
 
 Notre but est donc de sensibiliser le grand publique au coût énergétique induit par sa propre utilisation de l'ordinateur en proposant de mettre ces coûts en évidence en les traduisant en divers concepts familiers à une personne non experte (ex : effort physique, nombre de hamburgers en terme de calories, etc), par le biai d'utilisation de "concrete scales".
 <p align="center">
