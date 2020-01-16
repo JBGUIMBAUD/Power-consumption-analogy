@@ -454,7 +454,7 @@ window.onload = () => {
         .style("display",  d => { return d.value === null ? "none" : null; })
         .attr("x", ( (d, i) => {
             // console.log(i)
-            return x(d.label) + (x.bandwidth() / 2) -17 ; 
+            return x(d.label) + 10; 
         }))
             .style("fill",  d => { 
                 return d === d3.max(totals_data,  d => { return d.value; }) 
@@ -475,7 +475,7 @@ window.onload = () => {
         .attr("class", "label_bm")
         .style("display",  d => { return d.value === null ? "none" : null; })
         .attr("x", ( (d, i) => {
-            return x('') + (x.bandwidth() / 2) + padding_big_macs -17 ; 
+            return x('') + padding_big_macs + 10; 
         }))
         .style("fill",  d => { 
                 return d === d3.max(totals_data,  d => { return d.value; }) 
