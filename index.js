@@ -437,6 +437,39 @@ window.onload = () => {
                 tooltip.select("text").text(d3.format(".2f")(d[1]-d[0]));
             });
     
+    //value on top
+    totals_data = []
+    sport_data.forEach(element => {
+        totals_data.push(
+            {label: element.label, value: element.Repos + element.Google + element.Netflix + element.Jeux}
+        )
+    });
+    big_macs_total ={label: big_macs_data[0].label, value: big_macs_data[0].Repos + big_macs_data[0].Google + big_macs_data[0].Netflix + big_macs_data[0].Jeux}
+    // hours
+    svg_bars.selectAll(".label")        
+        .data(totals_data)
+        .enter()
+        .append("text")
+        .attr("class", "label")
+        .style("display",  d => { return d.value === null ? "none" : null; })
+        .attr("x", ( (d, i) => {
+            console.log(i)
+            return x(d.label) + (x.bandwidth() / 2) -8 ; 
+        }))
+            .style("fill",  d => { 
+                return d === d3.max(totals_data,  d => { return d.value; }) 
+                ? highlightColor : "white"
+                })
+        .attr("y",  d => { return height_bars; })
+            .attr("height", 0)
+                .transition()
+                .duration(1000)
+                .delay((d, i) => { return i * 150; })
+        .text( d => { return d3.format(".2f")(d.value) })
+        .attr("y",  d => { return y(d.value) + .1; })
+        .attr("dy", "-.7em");
+    // big macs
+    
     // big mac stroke separator
     svg_bars.append("line")//making a line for legend
         .attr("x1", x(""))
@@ -483,6 +516,13 @@ window.onload = () => {
         //     }))
         //     return array
         // })]);
+        totals_data = []
+        sport_data.forEach(element => {
+            totals_data.push(
+                {label: element.label, value: element.Repos + element.Google + element.Netflix + element.Jeux}
+            )
+        });
+
         var max = d3.max(stack(dataset), function (d) {
             return d3.max(d, function (d) {
                 return d.data.Repos + d.data.Google + d.data.Netflix + d.data.Jeux
@@ -509,18 +549,14 @@ window.onload = () => {
             .attr("height", function (d) { return y(d[0]) - y(d[1]); })
 
         // values on top
-        svg_bars.selectAll(".label")
-            .data(stackedData)
-            .attr("class", "label")
-            // .style("display", d => { return d.value === null ? "none" : null; })
-            .attr("x", (d => { return x(d.data.label) + (x.bandwidth() / 2); }))
-            .style("fill", d => {
-                return d.value === max ? highlightColor : greyColor
-            })
+        svg_bars.selectAll(".label").data(totals_data)
             .attr("height", 0)
-            .text(d => { return d3.format(".2f")(d[1]-d[0]) })
-            .attr("y", d => { return y(d.value) + .1; })
-            .attr("dy", "-.7em");
+                .transition()
+                .duration(1000)
+                .delay((d, i) => { return i * 150; })
+        .text( d => { return d3.format(".2f")(d.value) })
+        .attr("y",  d => { return y(d.value) + .1; })
+        .attr("dy", "-.7em");
 
         svg_bars
             .select(".yaxis").transition().duration(transition_bar_time)
