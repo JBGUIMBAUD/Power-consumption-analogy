@@ -4,84 +4,118 @@
         <meta charset="UTF-8"> 
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="charts.css">
+        <title>Visualisation</title>
     </head>
     <body>
-        <h1 class="main_title">La consommation de votre ordinateur</h1>
-        <h1 class="main_title">vue d'une autre manière</h1>
-        <p>
-            Les ordinateurs sont devenus des objets de la vie courante et sont massivement utilisés 
-            sans que l'on mesure vraiment le coût énergétique de cette utilisation. Cette visualisation
-            vous montre un apercu tangible de cette energie consommée. Traduite en heures de sport.. 
-            et en big macs !
-        </p>
-        <p>
-            Actuellement vous pouvez voir la consommation énergétique d'un francais moyen. Pour visualiser
-            la votre, il suffit d'utiliser les sliders sur la gauche. Le camembert en haut vous indique la répartition
-            horaire de votre utilisation.
-        </p>
-        <div class="content">
-            <section class="slider_menu">
-                <div class="slider_group">
-                    <!-- Rectangular switch -->
-                    <label>PC portable ?</label>
-                    <label class="switch">
-                        <input type="checkbox" id="isLaptop">
-                        <span class="toggle_slider"></span>
-                    </label>
-                    <br>
-                    <label>Utilisation du PC (en h/jour)</label>
-                    <div class="range">
-                        <input type="range" min="0" max="24" class="slider" id="pc">
-                    </div>
-                </div>
-                <div class="details">
-                    <h3>Détails</h3>
+        <div class="header">
+            <h1 class="main_title">La consommation de votre ordinateur</h1>
+            <h1 class="main_title">vue d'une autre manière</h1>
+        </div>
+        <div class="page">
+            <div class="text-container">
+                <p>
+                    Les ordinateurs sont devenus des objets de la vie courante et sont massivement utilisés 
+                    sans que l'on mesure vraiment le coût énergétique de cette utilisation. Cette visualisation
+                    vous montre un apercu tangible de cette energie consommée. Traduite en heures de sport.. 
+                    et en big macs !
+                </p>
+                <p>
+                    Actuellement vous pouvez voir la consommation énergétique d'un francais moyen. Pour visualiser
+                    la votre, il suffit d'utiliser les sliders sur la gauche. Le camembert en haut vous indique la répartition
+                    horaire de votre utilisation.
+                </p>
+            </div>
+            <div class="content">
+                <section class="slider_menu">
                     <div class="slider_group">
+                        <!-- Rectangular switch -->
+                        <div class="switch_wrapper">
+                            <label>PC portable ?</label>
+                            <label class="switch">
+                                <input type="checkbox" id="isLaptop">
+                                <span class="toggle_slider round"></span>
+                            </label>
+                        </div>
+                        <label>Utilisation du PC (en h/jour)</label>
+                        <div class="slider_subg">
+                            <div class="range">
+                                <input type="range" min="0" max="24" class="slider" id="pc" step="0.1">
+                            </div>
+                            <p class="slider_value"><span id="pc_value"></span></p>
+                        </div>
+                    </div>
+                    <div class="details">
+                        <h3>Détails</h3>
+                        <div class="slider_group">
                             <label>Repos</label>
-                        <div class="range">
-                            <input type="range" min="0" max="24" class="slider"id="twitch">
+                            <div class="slider_subg">
+                                <div class="range">
+                                    <input type="range" min="0" max="24" class="slider"id="twitch" step="0.1">
+                                </div>
+                                <p class="slider_value"><span id="idlle_value"></span></p>
+                            </div>
                         </div>
+                        <div class="slider_group">
+                            <label>Recherches Google</label>
+                            <div class="slider_subg">
+                                <div class="range">
+                                    <input type="range" min="0" max="24" class="slider" id="google" step="0.1">
+                                </div>
+                                <p class="slider_value"><span id="google_value"></span></p>
+                            </div>
+                        </div>
+                        <div class="slider_group">
+                            <label>Netflix</label>
+                            <div class="slider_subg">
+                                <div class="range">
+                                    <input type="range" min="0" max="24" class="slider" id="netflix" step="0.1">
+                                </div>
+                                <p class="slider_value"><span id="netflix_value"></span></p>
+                            </div>
+                        </div>
+                        <div class="slider_group">
+                            <label>Jeux vidéos</label>
+                            <div class=slider_subg>
+                                <div class="range">
+                                    <input type="range" min="0" max="24" class="slider" id="jeux" step="0.1">
+                                </div>
+                                <p class="slider_value"><span id="game_value"></span></p>
+                            </div>
+                        </div> 
+                    </div>
+                </section>
     
-                    </div>
-                    <div class="slider_group">
-                        <label>Google</label>
-                        <div class="range">
-                            <input type="range" min="0" max="24" class="slider" id="google">
-                        </div>
-                    </div>
-                    <div class="slider_group">
+                <aside class= "main_viz">
+                    <div id="bar_chart"></div>
+                </aside>
+                <!--<section class = "mini_pie">
+                    <div id="visu"></div>
+                </section>-->
+            </div>
+            <div class="text-container">
+            </div>
+        </div>
         
-                        <label>Netflix</label>
-                        <div class="range">
-                            <input type="range" min="0" max="24" class="slider" id="netflix">
-                        </div>
-                    </div> 
-                    <div class="slider_group">
-        
-                        <label>Jeux</label>
-                        <div class="range">
-                            <input type="range" min="0" max="24" class="slider" id="jeux">
-                        </div>
-                    </div> 
-                </div>
-            </section>
-
-            <aside class= "main_viz">
-                <div id="bar_chart"></div>
-            </aside>
-            <section class = "mini_pie">
-                <div id="visu"></div>
-            </section>
+        <div class="footer">
+            <p style="max-width: 900px;margin: auto;text-align: justify;text-justify: auto;font-size: 18px">
+                Note: Cette visualisation vous montre seulement l'énergie consommée directement par votre ordinateur.
+                Il faut savoir que cette énergie est loin d'être la seule ! Il y'a aussi de nombreux coûts indirects
+                comme l'energie requise pour faire fonctionner les serveurs lors de vos recherches internet..
+            </p>
+            <p style="padding: 10px;">
+                <a href="src.html">Sources des données</a> | 
+                <a href="https://jbguimbaud.github.io/pc_energy_cost/">Website</a>
+            </p>
+            <p style="font-size: 12px;">
+                Projet réalisé dans le cadre du  
+                <a href="https://lyondataviz.github.io/teaching/lyon1-m2/2019/">cours de Data Vizualisation</a>
+                 de l'Université Claude Bernard Lyon 1.
+                <a href="http://master-info.univ-lyon1.fr/IA/#intro">
+                <img src="ressources/lyon1.png" alt="Logo UCBL">
+                </a>
+            </p>
         </div>
         <script src="https://d3js.org/d3.v5.min.js"></script>
         <script src="index.js" type="text/javascript"></script>
     </body>
-    <footer>
-        <p>
-            Note: Cette visualisation vous montre seulement l'énergie consommée directement par votre ordinateur.
-            Il faut savoir que cette énergie est loin d'être la seule! Il y'a aussi de nombreux coûts indirects
-            comme l'energie requise pour faire fonctionner les serveurs lors de vos recherches internet..
-        </p>
-        <a href="src.html">Sources des données</a>
-    </footer>
 </html>

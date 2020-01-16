@@ -1,13 +1,6 @@
-
-function wattToDailyJoules(w, durationInHours) {
-    res = durationInHours * 3600 * w;
-    // console.log("Total energy(J: ", res)
-    return res
-}
-
-function wattToJoules(w_enery) {
+function wattToJoules(watt_per_hour) {
     // 1 J = 1 W/s.
-    res = w_enery * 3600
+    res = watt_per_hour * 3600
     // console.log("Equivalent in Joules", res)
     return res
 }
@@ -46,20 +39,12 @@ function joulesToBigMac(energy) {
     return res
 }
 
-function compute_total_Watt_enery(wattsConsumption, pcDetails) {
-    energy_total = 0
-    Object.keys(pcDetails).forEach(function (key) {
-        energy_total += pcDetails[key] * wattsConsumption[key]
-    });
-    return energy_total
-}
-
 function compute_watt_energy(wattsConsumption, pc_detailed_duration) {
+    // compute energy in watt/h
     dict = {}
     for (key in pc_detailed_duration) {
         dict[key] = pc_detailed_duration[key] * wattsConsumption[key]
     }
-    // console.log(dict)
     return dict
 }
 
@@ -82,6 +67,7 @@ var watts_consumption_laptop = {
     "Netflix": 40.5,
     "Jeux": 109
 }
+// desktop pc
 var watts_consumption_desktop = {
     "Repos": 137.5,
     "Google": 154.5,
@@ -144,7 +130,13 @@ window.onload = () => {
     twitchSlider.value = idlleUsage;
     netflixSlider.value = netflixUsage;
     gameSlider.value = gameUsage;
-    // isLaptopSlider.value = isLaptop;
+
+    // sliders values
+    var pc_val = document.getElementById("pc_value");
+    var idlle_val = document.getElementById("idlle_value");
+    var google_val = document.getElementById("google_value");
+    var netflix_val = document.getElementById("netflix_value");
+    var game_val = document.getElementById("game_value");
 
     gameSlider.oninput = () => {
         var next = parseInt(gameSlider.value);
@@ -184,6 +176,7 @@ window.onload = () => {
     }
     pcSlider.oninput = () => {
         // console.log("input");
+        console.log(x.bandwidth())
         var next = parseInt(pcSlider.value);
         if(next==0) {
             gameUsage = 0
@@ -206,6 +199,7 @@ window.onload = () => {
         twitchSlider.value = idlleUsage
         netflixSlider.value = netflixUsage
         gameSlider.value = gameUsage
+        pc_val.innerHTML = pcSlider.value;
         refreshInterface();
     }
     isLaptopSlider.oninput = () => {
@@ -226,6 +220,9 @@ window.onload = () => {
         .attr("class", "labels");
     svg.append("g")
         .attr("class", "lines");
+        
+    var arc = d3.arc()
+		.innerRadius(0);
 
     var width = 200,
         height = 100,
@@ -236,7 +233,20 @@ window.onload = () => {
         .value(function (d) {
             return d.value;
         });
+        
+        
+    var tooltippie = d3.select('#visu') 
+		.append('div')                                 
+		.attr('class', 'tooltippie');
 
+	tooltippie.append('div')
+		.attr('class', 'label');
+	
+	tooltippie.append('div')                     
+		.attr('class', 'x');
+		
+	tooltippie.append('div')  
+		.attr('class', 'percent');
 
     svg.attr("transform", "translate(" + (width /2 + 30)  + "," + height /1.7 + ")");
 
@@ -247,7 +257,7 @@ window.onload = () => {
         slice.enter()
             .append("path")
             .attr('d', d3.arc()
-                .innerRadius(radius * 0.8)
+                .innerRadius(0)
                 .outerRadius(radius)
             )
             .attr('fill', function (d) { return (colors(d.data.label)) })
@@ -255,25 +265,20 @@ window.onload = () => {
             .style("stroke-width", "2px")
             .style("opacity", 1)
             .on('mouseover', function (d, i) {
-                d3.select(this).transition()
-                     .duration('50')
-                     .attr('opacity', '.85')
+				var total = d3.sum(data.map(function(d) {       
+				return (d.enabled) ? d.x : 0;                                      
+				}));
+				tooltippie.select('.label').html(d.data.label);            
+				tooltippie.select('.x').html(d3.format(".2f")(d.value) + ' h');         
+				tooltippie.style('display', 'block');
             })
             .on('mouseout', function (d, i) {
-                d3.select(this).transition()
-                     .duration('50')
-                     .attr('opacity', '1');
+                tooltippie.style('display', 'none');
             })
-        /* slice		
-            .transition().duration(1000)
-            .attrTween("d", function(d) {
-                this._current = this._current || d;
-                var interpolate = d3.interpolate(this._current, d);
-                this._current = interpolate(0);
-                return function(t) {
-                    return arc(interpolate(t));
-                };
-            })*/
+            .on('mousemove', function(d) {                 
+				tooltippie.style('top', (d3.event.layerY + 10) + 'px') 
+				.style('left', (d3.event.layerX + 10) + 'px');
+			})
         slice.exit()
             .remove();
     }
@@ -285,12 +290,8 @@ window.onload = () => {
     var margin_bars = { top: 40, right: 30, bottom: 30, left: 50 },
         width_bars = 700 - margin_bars.left - margin_bars.right,
         height_bars = 600;
-
-    var greyColor = "#898989";
-    var barColor = d3.interpolateInferno(0.4);
-    var highlightColor = d3.interpolateInferno(0.3);
-
-    var formatPercent = d3.format(".0%");
+    var padding_big_macs = 40;
+    
 
     var svg_bars = d3.select("body").select("#bar_chart").append("svg")
         .attr("width", width_bars + margin_bars.left + margin_bars.right)
@@ -320,24 +321,32 @@ window.onload = () => {
     var x = d3.scaleBand()
         .range([0, width_bars])
         .padding(0.4);
+    var x_bm = d3.scaleBand()
+    .range([0, padding_big_macs])
+    .padding(0.4);
     var y = d3.scaleLinear()
         .range([height_bars , 0]);
 
     var color = d3.scaleOrdinal(["#004c6d", "#4c7c9b", "#86b0cc", "#c1e7ff"].reverse()).domain(subgroups);
 
-    //stack the data? --> stack per subgroup
     var stack = d3.stack()
         .keys(subgroups.reverse())
         .order(d3.stackOrderNone)
         .offset(d3.stackOffsetNone);
-    var stackedData = stack(dataset)
+
+    var sport_data = dataset.slice(0,5)
+    var big_macs_data = dataset.slice(5,6)
+    var stackedData = stack(sport_data)
+    var stackedBigMacs = stack(big_macs_data)
 
     var xAxis = d3.axisBottom(x).tickSize([]).tickPadding(10);
+    var xAxis_bm = d3.axisBottom(x_bm).tickSize([]).tickPadding(10);
     var yAxis = d3.axisLeft(y);
-    // var yAxis = d3.axisLeft(y).tickFormat(formatPercent);
 
-    labels = ["time walking(h.)", "time running (h.)", "time cycling (h.)", "time swimming (h.)", "Big Macs"]
+    labels = ["utilisation du pc (h.)","marche (h.)", "vélo (h.)", "course (h.)", "nage (h.)", ""]
     x.domain(labels);
+    x_bm.domain('Big Macs')
+
     // y.domain([0, d3.max(dataset, d => { return d.value; })]);
     // console.log(pcUsage)
     y.domain([0, d3.max(stackedData, function(d) {
@@ -346,24 +355,24 @@ window.onload = () => {
             // console.log(d.data.repos + d.data.google + d.data.netflix + d.data.jeux)
             return d.data.repos + d.data.google + d.data.netflix + d.data.jeux
         }))
-        // console.log(array)
         return array
     })]);
 
     svg_bars.append("g")
-        .attr("class", "x axis")
+        .attr("class", "xaxis")
         .attr("transform", "translate(0," + height_bars + ")")
         .call(xAxis);
+    svg_bars.append("g")
+        .attr("class", "xaxis")
+        .attr("transform", "translate("+ (x("") + padding_big_macs + 10) +"," + height_bars + ")")
+        .call(xAxis_bm);
     svg_bars.append("g")
         .attr("class", "yaxis")
         .call(yAxis);
 
     to_update = svg_bars.selectAll(".bar").data(stackedData)
         .enter().append("g")
-        .attr("fill", function(d) {
-            // console.log(d.key)
-            return color(d.key); 
-        })
+        .attr("fill", function(d) {return color(d.key);})
         .attr("class", "bar")
         .selectAll("rect")
         .data(function(d) {return d; })
@@ -373,8 +382,8 @@ window.onload = () => {
                     return x(d.data.label); 
                 })
                 .attr("y", function(d) { return y(d[1]); })
-                .attr("height", function(d) { return y(d[0]) - y(d[1]); })
-                .attr("width",x.bandwidth())
+                .attr("height", function(d) {return y(d[0]) - y(d[1]);})
+                .attr("width", x.bandwidth())
             .on("mouseover", function() {
                 tooltip.style("display", null);
                 d3.select(this).transition()
@@ -392,8 +401,50 @@ window.onload = () => {
                 var xPosition = d3.mouse(this)[0]+10;
                 var yPosition = d3.mouse(this)[1]+10;
                 tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-                tooltip.select("text").text(d3.format(".1f")(d[1]-d[0]));
+                tooltip.select("text").text(d3.format(".2f")(d[1]-d[0]));
             });
+    
+    // Bigs macs
+    big_macs = svg_bars.selectAll(".bar_bm").data(stackedBigMacs)
+        .enter().append("g")
+        .attr("fill", function(d) { return color(d.key);})
+        .attr("class", "bar_bm")
+        .selectAll("rect")
+        .data(function(d) {return d; })
+            .enter().append("rect")
+                .attr("x", function(d) {return x("");})
+                .attr("y", function(d) { return y(d[1]); })
+                .attr("height", function(d) {return y(d[0]) - y(d[1]);})
+                .attr("width", x.bandwidth())
+                .attr("transform", function(d, i) { return "translate(" +padding_big_macs+ ",0)"; })
+            .on("mouseover", function() {
+                tooltip.style("display", null);
+                d3.select(this).transition()
+                    .duration('50')
+                    .attr('opacity', '.8')
+            })
+            .on("mouseout", function() {
+                tooltip.style("display", "none");
+                d3.select(this).transition()
+                    .duration('50')
+                    .attr('opacity', '1')
+            })
+            .on("mousemove", function(d) {
+                // console.log(d);
+                var xPosition = d3.mouse(this)[0]+10;
+                var yPosition = d3.mouse(this)[1]+10;
+                tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+                tooltip.select("text").text(d3.format(".2f")(d[1]-d[0]));
+            });
+    
+    // big mac stroke separator
+    svg_bars.append("line")//making a line for legend
+        .attr("x1", x(""))
+        .attr("x2", x(""))
+        .attr("y1", height_bars)
+        .attr("y2", height_bars - 200)
+        .style("stroke-dasharray","5,5")//dashed array for line
+        .style("stroke", "white");
 
     var legend = svg_bars.append("g")
         .attr("font-family", "sans-serif")
@@ -416,15 +467,14 @@ window.onload = () => {
         .attr("dy", "0.32em")
         .style('fill', 'white')
         .text(function(d) { return d; });
-
-    // svg_bars.selectAll(".label")
-    //     .data(dataset)
-    //     .enter()
-    //     .append("text")
-    //     .attr("class", "label")
     
     refreshChart = function (dataset) {
-        var ymax = 15;
+        sport_data = dataset.slice(0,5)
+        big_macs_data = dataset.slice(5,6)
+        stackedData = stack(sport_data)
+        stackedBigMacs = stack(big_macs_data)
+
+        var ymax = 4;
 
         // y.domain([0, d3.max(stack(dataset), function (d) {
         //     array = []
@@ -445,25 +495,32 @@ window.onload = () => {
 
         yAxis.scale(y);
 
-        svg_bars.selectAll(".bar").data(stack(dataset))
+        svg_bars.selectAll(".bar").data(stackedData)
             .selectAll("rect")
             .data(function (d) { return d; }).transition().duration(transition_bar_time)
             .attr("y", function (d) { return y(d[1]); })
             .attr("height", function (d) { return y(d[0]) - y(d[1]); })
 
-        // svg_bars.selectAll(".label")
-        //     .data(dataset)
-        //     .attr("class", "label")
-        //     // .style("display", d => { return d.value === null ? "none" : null; })
-        //     .attr("x", (d => { return x(d.label) + (x.bandwidth() / 2); }))
-        //     .style("fill", d => {
-        //         return d.value === d3.max(dataset, d => { return d.value; })
-        //             ? highlightColor : greyColor
-        //     })
-        //     .attr("height", 0)
-        //     .text(d => { return d3.format(".1f")(d.value) })
-        //     .attr("y", d => { return y(d.value) + .1; })
-        //     .attr("dy", "-.7em");
+        
+        svg_bars.selectAll(".bar_bm").data(stackedBigMacs)
+            .selectAll("rect")
+            .data(function (d) { return d; }).transition().duration(transition_bar_time)
+            .attr("y", function (d) { return y(d[1]); })
+            .attr("height", function (d) { return y(d[0]) - y(d[1]); })
+
+        // values on top
+        svg_bars.selectAll(".label")
+            .data(stackedData)
+            .attr("class", "label")
+            // .style("display", d => { return d.value === null ? "none" : null; })
+            .attr("x", (d => { return x(d.data.label) + (x.bandwidth() / 2); }))
+            .style("fill", d => {
+                return d.value === max ? highlightColor : greyColor
+            })
+            .attr("height", 0)
+            .text(d => { return d3.format(".2f")(d[1]-d[0]) })
+            .attr("y", d => { return y(d.value) + .1; })
+            .attr("dy", "-.7em");
 
         svg_bars
             .select(".yaxis").transition().duration(transition_bar_time)
@@ -475,36 +532,32 @@ window.onload = () => {
         //TODO: check validitiy (SUM <= 24h)
         pcUsage = newPcUsage;
         pcSlider.value = pcUsage;
+
+        pc_val.innerHTML = pcSlider.value;
+        idlle_val.innerHTML = twitchSlider.value;
+        google_val.innerHTML = googleSlider.value;
+        netflix_val.innerHTML = netflixSlider.value;
+        game_val.innerHTML = gameSlider.value;
+
         pcDetails = {
             "Google": googleUsage,
             "Repos": idlleUsage,
             "Netflix": netflixUsage,
             "Jeux": gameUsage
         }
-
-        //TODO refresh D3
-        // console.log(getData(pcDetails, pcColors));
         refreshPie(getData(pcDetails, pcColors), pcColors);
         refreshChart(update_energy_data())
-        // print energies
-        // dataset = update_energy_data()
     }
     refreshInterface();
 
     
     function update_energy_data() {
-        // tot_energy_w = compute_total_Watt_enery(wattsConsumption, pcDetails)
-        // tot_energy = wattToJoules(tot_energy_w)
-        // walk = joulesToWalk(tot_energy)
-        // run = joulesToRun(tot_energy)
-        // cycle = joulesToCycle(tot_energy)
-        // swim = joulesToSwim(tot_energy)
-        // burger = joulesToBigMac(tot_energy)
-
-        labels = ["time walking(h.)", "time running (h.)", "time cycling (h.)", "time swimming (h.)", "Big Macs"]
+        labels = ["marche (h.)", "vélo (h.)","course (h.)", "nage (h.)", "Big Macs"]
         data = []
+        // add total hours
+        data.push({"label": "utilisation du pc (h.)", "Repos": pcDetails.Repos,"Google": pcDetails.Google, "Netflix": pcDetails.Netflix, "Jeux": pcDetails.Jeux})
+
         watt_energies = compute_watt_energy(wattsConsumption, pcDetails)
-        // console.log("energies", watt_energies)
         for (i in labels) {
             label = labels[i]
             iddle = compute_energy_joules(wattToJoules(watt_energies.Repos), label)
@@ -513,32 +566,19 @@ window.onload = () => {
             game = compute_energy_joules(wattToJoules(watt_energies.Jeux), label)
             data.push({"label": label, "Repos": iddle,"Google": google, "Netflix": netflix, "Jeux": game})
         }
-        // console.log(data)
-
-
-        // data = [
-        //     { "label": "time walking(h.)", "value": walk },
-        //     { "label": "time running (h.)", "value": run },
-        //     { "label": "time cycling (h.)", "value": cycle },
-        //     { "label": "time swimming (h.)", "value": swim },
-        //     { "label": "Big Macs", "value": burger }
-        // ]
         return data
     }
 
     function compute_energy_joules(energy, label) {
         switch (label) {
-            case "time walking(h.)":
+            case "marche (h.)":
                 return joulesToWalk(energy)
-                break;
-            case "time running (h.)":
+            case "course (h.)":
                 return joulesToRun(energy)
-            case "time cycling (h.)":
+            case "vélo (h.)":
                 return joulesToCycle(energy)
-                break;
-            case "time swimming (h.)":
+            case "nage (h.)":
                 return joulesToSwim(energy)
-                break;
             case "Big Macs":
                 return joulesToBigMac(energy)
             default:
