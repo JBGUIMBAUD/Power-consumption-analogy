@@ -290,7 +290,7 @@ footer {
 
 .inline { float:left; }
 footer a {
-  display: block;
+  display: inline-block;
   padding-top: 1em;
 }
 
