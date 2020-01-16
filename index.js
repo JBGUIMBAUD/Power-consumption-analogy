@@ -48,7 +48,8 @@ function compute_watt_energy(wattsConsumption, pc_detailed_duration) {
     return dict
 }
 
-var gameUsage = 0.6, idlleUsage = 0.4, netflixUsage = 0.57, googleUsage = 1.49, isLaptop = 0;
+// var gameUsage = 0.6, idlleUsage = 0.4, netflixUsage = 0.57, googleUsage = 1.49, isLaptop = 0;
+var gameUsage = 0.5, idlleUsage = 0.5, netflixUsage = 0.5, googleUsage = 1.5, isLaptop = 0;
 var pcUsage = 0;
 
 var googleSlider, twitchSlider, netflixSlider, gameSlider, pcSlider, isLaptopSlider;
