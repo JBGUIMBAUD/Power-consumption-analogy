@@ -304,8 +304,8 @@ footer {
 
 .inline { float:left; }
 footer a {
-  display: block;
-  padding-top: 1em;
+  display: inline-block;
+  padding-top: 0.5em;
 }
 
 footer a:first-child {
