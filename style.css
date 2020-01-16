@@ -1,7 +1,7 @@
 
 .range {
     width: 200px;
-    margin: 10px;
+    margin: 9px 9px 0 0;
 }
 
 * {
@@ -196,8 +196,7 @@ input:checked + .toggle_slider:before {
 }
 
 .slider_value {
-  margin-top: 7px;
-  margin-bottom: 5px;
+  margin:7px 0 5px 0;
 }
 
 .content {
@@ -211,7 +210,7 @@ input:checked + .toggle_slider:before {
   grid-column: 1;
   grid-row: 3 / 6;
   background-color: #0b132b;
-  padding: 20px;
+  padding: 20px 10px 20px 10px;
 }
 .main_viz { 
   grid-column: 8;
@@ -331,7 +330,7 @@ a img {
 }
 
 .slider_subg {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: flex-start;
 }
