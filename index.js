@@ -508,19 +508,19 @@ window.onload = () => {
             .attr("y", function (d) { return y(d[1]); })
             .attr("height", function (d) { return y(d[0]) - y(d[1]); })
 
-        // svg_bars.selectAll(".label")
-        //     .data(dataset)
-        //     .attr("class", "label")
-        //     // .style("display", d => { return d.value === null ? "none" : null; })
-        //     .attr("x", (d => { return x(d.label) + (x.bandwidth() / 2); }))
-        //     .style("fill", d => {
-        //         return d.value === d3.max(dataset, d => { return d.value; })
-        //             ? highlightColor : greyColor
-        //     })
-        //     .attr("height", 0)
-        //     .text(d => { return d3.format(".1f")(d.value) })
-        //     .attr("y", d => { return y(d.value) + .1; })
-        //     .attr("dy", "-.7em");
+        // values on top
+        svg_bars.selectAll(".label")
+            .data(stackedData)
+            .attr("class", "label")
+            // .style("display", d => { return d.value === null ? "none" : null; })
+            .attr("x", (d => { return x(d.data.label) + (x.bandwidth() / 2); }))
+            .style("fill", d => {
+                return d.value === max ? highlightColor : greyColor
+            })
+            .attr("height", 0)
+            .text(d => { return d3.format(".2f")(d[1]-d[0]) })
+            .attr("y", d => { return y(d.value) + .1; })
+            .attr("dy", "-.7em");
 
         svg_bars
             .select(".yaxis").transition().duration(transition_bar_time)
