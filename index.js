@@ -444,7 +444,8 @@ window.onload = () => {
             {label: element.label, value: element.Repos + element.Google + element.Netflix + element.Jeux}
         )
     });
-    big_macs_total ={label: big_macs_data[0].label, value: big_macs_data[0].Repos + big_macs_data[0].Google + big_macs_data[0].Netflix + big_macs_data[0].Jeux}
+    big_macs_total = [{label: big_macs_data[0].label, value: big_macs_data[0].Repos + big_macs_data[0].Google + big_macs_data[0].Netflix + big_macs_data[0].Jeux}]
+    console.log(big_macs_total)
     // hours
     svg_bars.selectAll(".label")        
         .data(totals_data)
@@ -453,14 +454,13 @@ window.onload = () => {
         .attr("class", "label")
         .style("display",  d => { return d.value === null ? "none" : null; })
         .attr("x", ( (d, i) => {
-            console.log(i)
+            // console.log(i)
             return x(d.label) + (x.bandwidth() / 2) -8 ; 
         }))
             .style("fill",  d => { 
                 return d === d3.max(totals_data,  d => { return d.value; }) 
                 ? highlightColor : "white"
                 })
-        .attr("y",  d => { return height_bars; })
             .attr("height", 0)
                 .transition()
                 .duration(1000)
@@ -469,6 +469,25 @@ window.onload = () => {
         .attr("y",  d => { return y(d.value) + .1; })
         .attr("dy", "-.7em");
     // big macs
+    svg_bars.selectAll(".label_bm")        
+        .data(big_macs_total)
+        .enter()
+        .append("text")
+        .attr("class", "label_bm")
+        .style("display",  d => { return d.value === null ? "none" : null; })
+        .attr("x", ( (d, i) => {
+            return x('') + (x.bandwidth() / 2) + padding_big_macs -8 ; 
+        }))
+        .style("fill",  d => { 
+                return d === d3.max(totals_data,  d => { return d.value; }) 
+                ? highlightColor : "white"
+                })
+            .attr("height", 0)
+                .transition()
+                .duration(1000)
+                .delay((d, i) => { return i * 150; })
+        .text( d => { return d3.format(".2f")(d.value) })
+        .attr("dy", "-.7em");
     
     // big mac stroke separator
     svg_bars.append("line")//making a line for legend
@@ -522,6 +541,7 @@ window.onload = () => {
                 {label: element.label, value: element.Repos + element.Google + element.Netflix + element.Jeux}
             )
         });
+        big_macs_total = [{label: big_macs_data[0].label, value: big_macs_data[0].Repos + big_macs_data[0].Google + big_macs_data[0].Netflix + big_macs_data[0].Jeux}]
 
         var max = d3.max(stack(dataset), function (d) {
             return d3.max(d, function (d) {
@@ -557,6 +577,15 @@ window.onload = () => {
         .text( d => { return d3.format(".2f")(d.value) })
         .attr("y",  d => { return y(d.value) + .1; })
         .attr("dy", "-.7em");
+
+        svg_bars.selectAll(".label_bm").data(big_macs_total)
+            .attr("height", 0)
+                .transition()
+                .duration(1000)
+                .delay((d, i) => { return 6 * 150; })
+            .text( d => { return d3.format(".2f")(d.value) })
+            .attr("y",  d => { return y(d.value) + .1; })
+            .attr("dy", "-.7em");
 
         svg_bars
             .select(".yaxis").transition().duration(transition_bar_time)
