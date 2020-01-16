@@ -434,9 +434,6 @@ window.onload = () => {
         //     return array
         // })]);
         var max = d3.max(stack(dataset), function (d) {
-            // array = []
-            // array.push()
-            // console.log(array);
             return d3.max(d, function (d) {
                 return d.data.Repos + d.data.Google + d.data.Netflix + d.data.Jeux
             })
