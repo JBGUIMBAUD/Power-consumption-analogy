@@ -2,9 +2,9 @@
 Today, the question of our impact on the environment is really important. But we aren't familiar to take in consideration our web an computer using habit. It is difficult to represent us our electricity consommation, because of the abstract representation of the Watt/Hour unit.
 
 Our goal with this project is to raise awareness among general public about the energetic cost induced by our own computer usages with proposing to highlight theres costs with familiar concepts for non expert peoples with concrete scales (ex: physical efforts, hamburgers numbers express in calorie, ...).
-
+<p align="center">
 <img src="ressources/readme_chview.png" alt="Charts View" width="70%" height="auto"/>
-
+</p>
 This project is realise within the scope of the Data Vizualisation course of Lyon 1 University M2 IA :
 https://lyondataviz.github.io/teaching/lyon1-m2/2019/
 
