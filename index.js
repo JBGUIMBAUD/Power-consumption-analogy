@@ -378,7 +378,6 @@ window.onload = () => {
         .data(function(d) {return d; })
             .enter().append("rect")
                 .attr("x", function(d) {
-                    // console.log("d",d.data.label)
                     return x(d.data.label); 
                 })
                 .attr("y", function(d) { return y(d[1]); })
@@ -455,7 +454,7 @@ window.onload = () => {
         .style("display",  d => { return d.value === null ? "none" : null; })
         .attr("x", ( (d, i) => {
             // console.log(i)
-            return x(d.label) + (x.bandwidth() / 2) -8 ; 
+            return x(d.label) + (x.bandwidth() / 2) -17 ; 
         }))
             .style("fill",  d => { 
                 return d === d3.max(totals_data,  d => { return d.value; }) 
@@ -476,7 +475,7 @@ window.onload = () => {
         .attr("class", "label_bm")
         .style("display",  d => { return d.value === null ? "none" : null; })
         .attr("x", ( (d, i) => {
-            return x('') + (x.bandwidth() / 2) + padding_big_macs -8 ; 
+            return x('') + (x.bandwidth() / 2) + padding_big_macs -17 ; 
         }))
         .style("fill",  d => { 
                 return d === d3.max(totals_data,  d => { return d.value; }) 
