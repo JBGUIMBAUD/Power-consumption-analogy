@@ -321,3 +321,14 @@ a img {
   flex-direction: row;
   align-items: flex-start;
 }
+
+.auteurs {
+  display: inline-block;
+  font-size: 0.8em;
+}
+
+.auteurs a {
+  top: 25%;
+  -ms-transform: translateY(25%);
+  transform: translateY(25%);
+}
