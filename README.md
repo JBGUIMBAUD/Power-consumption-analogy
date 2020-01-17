@@ -31,7 +31,7 @@ https://github.com/JBGUIMBAUD/pc_energy_cost/wiki/Document-de-cadrage
 * [Romain Vuillemot](http://romain.vuillemot.net/)
 
 
-=====================================================================================================================================================
+___
 
 # Projet : Power-consumption-analogy
 Aujourd'hui, la question de notre impact energétique sur l'environnement est une question centrale. Cependant, le grand publique ne semble pas habitué à relier leur utilisation d'internet et des ordinateurs et leur consommation électrique. Cela est du notamment au fait qu'il est compliqué de se représenter les Watt/Heure de manière concrète.
