@@ -33,7 +33,7 @@ https://github.com/JBGUIMBAUD/pc_energy_cost/wiki/Document-de-cadrage
 
 =====================================================================================================================================================
 
-# Projet : Power-consumption-analogy :
+# Projet : Power-consumption-analogy
 Aujourd'hui, la question de notre impact energétique sur l'environnement est une question centrale. Cependant, le grand publique ne semble pas habitué à relier leur utilisation d'internet et des ordinateurs et leur consommation électrique. Cela est du notamment au fait qu'il est compliqué de se représenter les Watt/Heure de manière concrète.
 
 Notre but est donc de sensibiliser le grand publique au coût énergétique induit par sa propre utilisation de l'ordinateur. Nous proposons de mettre ces coûts en évidence en les traduisant en divers concepts familiers à une personne non experte, par l'utilisation de "concrete scales" (ex : effort physique, nombre de Big-Mac en terme de calories, etc.).
