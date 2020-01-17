@@ -204,6 +204,7 @@ input:checked + .toggle_slider:before {
   grid-template-columns: 100px 0.5fr 1fr;
   grid-gap: 10px;
   grid-template-rows: 100px;
+  margin-top: -80px;
 }
 .slider_menu {
   width: 260px;

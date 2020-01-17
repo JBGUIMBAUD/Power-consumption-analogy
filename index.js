@@ -249,7 +249,7 @@ window.onload = () => {
 	tooltippie.append('div')  
 		.attr('class', 'percent');
 
-    svg.attr("transform", "translate(" + (width /2 + 30)  + "," + height /1.7 + ")");
+    svg.attr("transform", "translate(" + (width /2 + 20)  + "," + (height - 15)  + ")");
 
     var refreshPie = function (data, colors) {
 
