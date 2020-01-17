@@ -1,9 +1,9 @@
-# Project : pc_energy_cost :
+# Project : Power-consumption-analogy :
 Today, the question of our impact on the environment is really important. But we aren't familiar to take in consideration our web an computer using habit. It is difficult to represent us our electricity consommation, because of the abstract representation of the Watt/Hour unit.
 
 Our goal with this project is to raise awareness among general public about the energetic cost induced by our own computer usages with proposing to highlight theres costs with familiar concepts for non expert peoples with concrete scales (ex: physical efforts, hamburgers numbers express in calorie, ...).
 <p align="center">
-	<img src="ressources/readme_chview.png" alt="Charts View" width="70%" height="auto"/>
+	<img src="thumbnail.png" alt="Charts View" width="70%" height="auto"/>
 </p>
 This project is realise within the scope of the Data Vizualisation course of Lyon 1 University M2 IA :
 https://lyondataviz.github.io/teaching/lyon1-m2/2019/
@@ -35,7 +35,7 @@ Aujourd'hui, la question de notre impact energétique est une des questions les 
 
 Notre but est donc de sensibiliser le grand publique au coût énergétique induit par sa propre utilisation de l'ordinateur en proposant de mettre ces coûts en évidence en les traduisant en divers concepts familiers à une personne non experte (ex : effort physique, nombre de hamburgers en terme de calories, etc), par le biai d'utilisation de "concrete scales".
 <p align="center">
-	<img src="ressources/readme_chview.png" alt="Charts View" width="70%" height="auto"/>
+	<img src="thumbnail.png" alt="Charts View" width="70%" height="auto"/>
 </p>
 Ce projet est réalisé dans le cadre du cours de Data Vizualisation du M2 IA de l'université Lyon 1 :
 https://lyondataviz.github.io/teaching/lyon1-m2/2019/
